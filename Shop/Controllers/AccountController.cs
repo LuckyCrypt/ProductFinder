@@ -22,20 +22,20 @@ namespace Shop.Controllers
 			_context = context;
 		}
 
-		public async Task<IActionResult> LoginAsync([Bind(Prefix = "l")] LoginViewModel model)
-		{
-			if (!ModelState.IsValid)
-			{
-				return View("Index", new AccountViewModel
-				{
-					LoginViewModel = model
-				});
-			}
-				var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == model.Login && u.Password == model.Password);
+        public async Task<IActionResult> LoginAsync([Bind(Prefix = "l")] LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Index", new AccountViewModel
+                {
+                    LoginViewModel = model
+                });
+            }
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == model.Login && u.Password == model.Password);
 
-			if (user is null) 
-			{
-				ViewBag.Error = "Некорректные логин и(или) пароль!";
+            if (user is null)
+            {
+                ViewBag.Error = "Некорректные логин и(или) пароль!";
                 return View("Index", new AccountViewModel
                 {
                     LoginViewModel = model
