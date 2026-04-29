@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shop.Models;
+using Shop.Database.Interfaces;
+using Shop.Repository;
+using Shop.ViewModels;
 using System.Diagnostics;
 
 namespace Shop.Controllers
@@ -15,10 +17,22 @@ namespace Shop.Controllers
 			_logger = logger;
 		}
 
-		public IActionResult Index()
-		{
-			return View();
-		}
+        public async Task<IActionResult> Index([FromServices] DataFromSqlRepository dataFromSql)
+        {
+			var _products = await dataFromSql.GetRentAparts();	
+            return View(_products);
+        }
+
+		//public IActionResult Details(int id)
+		//{
+  //          var _products = await dataFromSql.GetRentAparts();
+  //          var product = _products.FirstOrDefault(p => p.Id == id);
+		//	if (product == null)
+		//	{
+		//		return NotFound();
+		//	}
+		//	return View(product);
+		//}
 
 		public IActionResult Privacy()
 		{

@@ -1,0 +1,38 @@
+﻿@model Shop.ViewModels.RentApartViewModel
+
+@{
+    ViewData["Title"] = Model?.Name ?? "Детали Товара";
+}
+
+<h1 class="mb-4">@Model.Name</h1>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <img src="@Model.ImageUrl" class="img-fluid rounded shadow-sm" alt="@Model.Name">
+    </div>
+    <div class="col-md-6 mb-4">
+        <h2 class="display-5 mb-3">@Model.Price.ToString("C")</h2>
+        <p class="lead">@Model.Description</p>
+        
+        <hr>
+
+        <form id="addToCartForm" asp-controller="Cart" asp-action="AddToCart" method="post">
+            <!-- Точка для контроллера: передача ProductId -->
+            <input type="hidden" name="productId" value="@Model.Id" />
+            <div class="mb-3 d-flex align-items-center">
+                <label for="quantityInput" class="form-label me-3 h5 mb-0">Количество:</label>
+                <input type="number" id="quantityInput" name="quantity" class="form-control me-3" value="1" min="1" style="width: 100px;">
+                <!-- Точка для контроллера: отправка формы в CartController/AddToCart -->
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-cart-plus me-2"></i> Добавить в корзину
+                </button>
+            </div>
+        </form>
+
+        <hr>
+
+        <a asp-controller="Products" asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i> Вернуться к товарам
+        </a>
+    </div>
+</div>

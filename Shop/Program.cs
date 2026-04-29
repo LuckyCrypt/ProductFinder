@@ -1,21 +1,29 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using ToDoList.Domain;
+using Shop.Database;
+using Shop.Domain;
+using Shop.Repository;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews(); 
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
-var connectionString = builder.Configuration.GetConnectionString("Default");
+var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
 
-builder.Services.AddDbContext<ToDoListContext>(opt => opt.UseSqlServer(connectionString));
+builder.Services.AddDbContext<AppDbContext>(opt => opt.UseNpgsql(connectionString));
+
+//builder.Services.AddAutoMapper(MappingProfile);
+builder.Services.AddAutoMapper(config =>
+{
+    config.AddProfile<MappingProfile>();
+});
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 	.AddCookie(options => options.LoginPath = "/account");
 builder.Services.AddAuthorization();
-
+builder.Services.AddScoped<DataFromSqlRepository>();
 
 var app = builder.Build();
 
@@ -23,7 +31,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
 	app.UseExceptionHandler("/Home/Error");
-	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 	app.UseHsts();
 }
 
@@ -32,6 +39,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

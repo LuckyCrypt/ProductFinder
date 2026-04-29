@@ -4,20 +4,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shop.Models.Account;
 using System.Security.Claims;
-using ToDoList.Domain;
-using ToDoList.Domain.Entities;
+using Shop.Domain;
+using Shop.Domain.Entities;
+using Shop.Database;
 
 namespace Shop.Controllers
 {
-	public class AccountController : ToDoBaseController
-	{
-		private readonly ToDoListContext _context;
+	public class AccountController : Controller
+    {
+		private readonly AppDbContext _context;
 		public IActionResult Index()
 		{
 			return View();
 		}
 
-		public AccountController(ToDoListContext context)
+		public AccountController(AppDbContext context)
 		{
 			_context = context;
 		}

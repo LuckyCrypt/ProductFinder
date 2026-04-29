@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ToDoList.Domain.Entities
+namespace Shop.Domain.Entities
 {
 	public class TaskApp:Entity
 	{
-		public string Name { get; set; }
+		public required string Name { get; set; }
 
 		public bool IsCompleted { get; set; }
 
@@ -14,7 +14,7 @@ namespace ToDoList.Domain.Entities
 
 		[ForeignKey("UserID")]
 
-		public User User { get; set; }
+		public required User User { get; set; }
 			
 	}	
 }

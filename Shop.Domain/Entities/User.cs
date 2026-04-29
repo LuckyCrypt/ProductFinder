@@ -1,4 +1,4 @@
-﻿namespace ToDoList.Domain.Entities
+﻿namespace Shop.Domain.Entities
 {
 	public class User : Entity
 	{
