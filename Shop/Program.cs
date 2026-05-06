@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Shop.Database;
 using Shop.Domain;
 using Shop.Repository;
 
