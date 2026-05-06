@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shop.Database.Interfaces;
 using Shop.Repository;
 using Shop.ViewModels;
 using System.Diagnostics;

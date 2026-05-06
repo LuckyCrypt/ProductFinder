@@ -1,7 +1,7 @@
 ﻿using Shop.Models;
 using Shop.ViewModels;
 
-namespace Shop.Database.Interfaces
+namespace Shop.Domain.Interfaces
 {
     public interface IDataFromSql
     {

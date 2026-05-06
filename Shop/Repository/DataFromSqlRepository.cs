@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Shop.Database;
-using Shop.Database.Interfaces;
+using Shop.Domain;
+using Shop.Domain.Interfaces;
 using Shop.Models;
 using Shop.ViewModels;
 
@@ -9,20 +9,19 @@ namespace Shop.Repository
 {
     public class DataFromSqlRepository : IDataFromSql
     {
-        private readonly AppDbContext _appDbContext;
-        private readonly IMapper _mapper;
+        private readonly DBContext _appDbContext;
 
 
-        public DataFromSqlRepository(AppDbContext appDbContext, IConfiguration configuration, IMapper mapper)
+        public DataFromSqlRepository(DBContext appDbContext)
         {
             _appDbContext = appDbContext;
-            _mapper = mapper;
         }
         public async Task<List<RentApartViewModel>> GetRentAparts()
         {
-            var parent = await _appDbContext.apartmentsavito.ToListAsync();
+            var result = await _appDbContext.apartmentsavito.ToListAsync();
 
-            return _mapper.Map<List<RentApartViewModel>>(parent);
+            List<RentApartViewModel> viewModel = CustomMapper.ToViewModelList(result);
+            return viewModel;
         }
     }
 }

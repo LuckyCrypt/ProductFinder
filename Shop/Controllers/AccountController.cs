@@ -12,13 +12,13 @@ namespace Shop.Controllers
 {
 	public class AccountController : Controller
     {
-		private readonly AppDbContext _context;
+		private readonly DBContext _context;
 		public IActionResult Index()
 		{
 			return View();
 		}
 
-		public AccountController(AppDbContext context)
+		public AccountController(DBContext context)
 		{
 			_context = context;
 		}

@@ -12,13 +12,12 @@ builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
 
-builder.Services.AddDbContext<AppDbContext>(opt => opt.UseNpgsql(connectionString));
+builder.Services.AddDbContext<DBContext>(opt => opt.UseNpgsql(connectionString));
 
-//builder.Services.AddAutoMapper(MappingProfile);
-builder.Services.AddAutoMapper(config =>
-{
-    config.AddProfile<MappingProfile>();
-});
+//builder.Services.AddAutoMapper(config =>
+//{
+//    config.AddProfile<MappingProfile>();
+//});
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 	.AddCookie(options => options.LoginPath = "/account");
@@ -44,6 +43,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
 	name: "default",
-	pattern: "{controller=account}/{action=Index}/{id?}");
+	pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
