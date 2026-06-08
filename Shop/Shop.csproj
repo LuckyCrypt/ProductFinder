@@ -21,6 +21,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shop.Domain\Shop.Domain.csproj" />
+    <ProjectReference Include="..\ParsElements\ParsElements.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Domain\Entities\" />
   </ItemGroup>
 
 </Project>

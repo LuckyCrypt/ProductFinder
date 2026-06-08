@@ -1,0 +1,87 @@
+﻿@page
+@model Shop.Views.Computers.IndexModel
+@{
+}
+<div class="category-wrapper">
+    <!-- Хлебные крошки (навигация) -->
+    <div class="breadcrumbs">
+        <a href="/">Главная</a> <span class="separator">/</span> <span>Компьютеры</span>
+    </div>
+
+    <h1 class="page-title">Компьютерная техника</h1>
+
+    <!-- Основной макет страницы (Сайдбар + Товары) -->
+    <div class="catalog-layout">
+        
+        <!-- ЛЕВАЯ КОЛОНКА: ФИЛЬТРЫ -->
+        <aside class="filters-sidebar">
+            <div class="filter-block">
+                <h3>Цена, ₽</h3>
+                <div class="price-inputs">
+                    <input type="number" placeholder="От 10 000">
+                    <span> - </span>
+                    <input type="number" placeholder="До 200 000">
+                </div>
+            </div>
+
+            <div class="filter-block">
+                <h3>Производитель</h3>
+                <label class="checkbox-label"><input type="checkbox"> Apple</label>
+                <label class="checkbox-label"><input type="checkbox"> ASUS</label>
+                <label class="checkbox-label"><input type="checkbox"> Lenovo</label>
+                <label class="checkbox-label"><input type="checkbox"> MSI</label>
+                <label class="checkbox-label"><input type="checkbox"> HP</label>
+            </div>
+
+            <div class="filter-block">
+                <h3>Тип</h3>
+                <label class="checkbox-label"><input type="checkbox"> Ноутбуки</label>
+                <label class="checkbox-label"><input type="checkbox"> Системные блоки</label>
+                <label class="checkbox-label"><input type="checkbox"> Моноблоки</label>
+            </div>
+
+            <button class="btn-apply-filters">Показать товары</button>
+        </aside>
+
+        <!-- ПРАВАЯ КОЛОНКА: СЕТКА ТОВАРОВ -->
+        <div class="products-grid">
+            
+            <!-- Карточка товара 1 -->
+            <div class="product-card">
+                <div class="product-img-placeholder" style="background-color: #f2f2f7;">IMG</div>
+                <div class="product-price">124 990 ₽ <span class="old-price">135 000 ₽</span></div>
+                <div class="product-title">Ноутбук Apple MacBook Air 13" M1/8Gb/256Gb</div>
+                <div class="product-rating">★ 4.9 (120 отзывов)</div>
+                <button class="btn-add-cart">В корзину</button>
+            </div>
+
+            <!-- Карточка товара 2 -->
+            <div class="product-card">
+                <div class="product-img-placeholder" style="background-color: #e5f0ea;">IMG</div>
+                <div class="product-price">79 990 ₽</div>
+                <div class="product-title">Ноутбук ASUS Vivobook 16X 16" / Ryzen 5 / 16GB</div>
+                <div class="product-rating">★ 4.7 (45 отзывов)</div>
+                <button class="btn-add-cart">В корзину</button>
+            </div>
+
+            <!-- Карточка товара 3 -->
+            <div class="product-card">
+                <div class="product-img-placeholder" style="background-color: #fde8e8;">IMG</div>
+                <div class="product-price">156 500 ₽</div>
+                <div class="product-title">Игровой ПК MSI MAG Infinite S3 / Core i5 / RTX 4060</div>
+                <div class="product-rating">★ 4.8 (89 отзывов)</div>
+                <button class="btn-add-cart">В корзину</button>
+            </div>
+
+            <!-- Карточка товара 4 -->
+            <div class="product-card">
+                <div class="product-img-placeholder" style="background-color: #eef2ff;">IMG</div>
+                <div class="product-price">45 000 ₽ <span class="old-price">50 000 ₽</span></div>
+                <div class="product-title">Моноблок Lenovo IdeaCentre AIO 3</div>
+                <div class="product-rating">★ 4.5 (22 отзыва)</div>
+                <button class="btn-add-cart">В корзину</button>
+            </div>
+
+        </div>
+    </div>
+</div>

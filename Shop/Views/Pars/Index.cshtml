@@ -1,0 +1,21 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>Парсер</h2>
+
+    @if (TempData["ParsMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["ParsMessage"]</div>
+    }
+
+    <form asp-action="LogHistory" method="post">
+        <button type="submit" class="btn btn-primary">LogHistory</button>
+    </form>
+
+    <form asp-action="LogToDb" method="post" class="mt-2">
+        <button type="submit" class="btn btn-secondary">LogToDb</button>
+    </form>
+
+</div>

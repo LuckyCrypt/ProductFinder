@@ -1,115 +1,290 @@
-﻿@{
-    ViewData["Title"] = "Каталог техники";
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
+    <style>
+            /* --- БАЗА ДЛЯ НАШЕГО БЛОКА --- */
+            .marketplace-wrapper {
+                width: 100%; /* Занимает всю ширину, которую дает _Layout */
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            }
+
+                .marketplace-wrapper * {
+                    box-sizing: border-box; /* Важно, чтобы паддинги не ломали ширину */
+                }
+
+                /* --- ВЕРХНЯЯ НАВИГАЦИЯ --- */
+                .marketplace-wrapper .top-nav {
+                    display: flex;
+                    gap: 24px;
+                    overflow-x: auto;
+                    padding-bottom: 20px;
+                    margin-bottom: 20px;
+                    white-space: nowrap;
+                }
+
+                    .marketplace-wrapper .top-nav a {
+                        text-decoration: none;
+                        color: #777;
+                        font-size: 14px;
+                        font-weight: 500;
+                        transition: color 0.2s;
+                    }
+
+                        .marketplace-wrapper .top-nav a:hover {
+                            color: #000;
+                        }
+
+                /* --- ГЛАВНАЯ СЕТКА БАННЕРОВ --- */
+                .marketplace-wrapper .main-banners {
+                    display: grid;
+                    /* 1fr - значит фракция (часть). Сетка гибкая и сожмется под твой _Layout */
+                    grid-template-columns: 1fr 1fr 2fr;
+                    grid-template-rows: 180px 180px;
+                    gap: 16px;
+                    margin-bottom: 16px;
+                }
+
+                .marketplace-wrapper .card {
+                    border-radius: 16px;
+                    padding: 20px;
+                    position: relative;
+                    overflow: hidden;
+                    cursor: pointer;
+                    transition: transform 0.2s;
+                }
+
+                    .marketplace-wrapper .card:hover {
+                        transform: scale(1.02);
+                    }
+
+                .marketplace-wrapper .card-washers {
+                    grid-column: 1;
+                    grid-row: 1;
+                    background-color: #4a67c9;
+                    color: white;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                }
+
+                    .marketplace-wrapper .card-washers .title {
+                        font-size: 18px;
+                        font-weight: 600;
+                        max-width: 50%;
+                    }
+
+                .marketplace-wrapper .card-watches {
+                    grid-column: 1;
+                    grid-row: 2;
+                    background-color: #f0f0f0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                }
+
+                    .marketplace-wrapper .card-watches .title {
+                        font-size: 18px;
+                        color: #555;
+                        max-width: 50%;
+                    }
+
+                .marketplace-wrapper .card-smartphones {
+                    grid-column: 2;
+                    grid-row: 1 / span 2;
+                    background: linear-gradient(135deg, #d32f2f, #f44336);
+                    color: white;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                }
+
+                    .marketplace-wrapper .card-smartphones .title {
+                        font-size: 24px;
+                        font-weight: bold;
+                        margin-top: 10px;
+                    }
+
+                .marketplace-wrapper .card-computers {
+                    grid-column: 3;
+                    grid-row: 1 / span 2;
+                    background-color: #f2f4f7;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                }
+
+                    .marketplace-wrapper .card-computers .title {
+                        font-size: clamp(20px, 2.5vw, 32px); /* Защита текста от вылезания на узких экранах */
+                        color: #1a498b;
+                        font-weight: bold;
+                        margin-top: 40px;
+                        margin-right: 40px;
+                        text-align: right;
+                        line-height: 1.1;
+                    }
+
+                    .marketplace-wrapper .card-computers .subtitle {
+                        font-size: 16px;
+                        color: #555;
+                        margin-right: 40px;
+                    }
+
+                /* --- МАЛЕНЬКИЕ БАННЕРЫ --- */
+                .marketplace-wrapper .sub-banners {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 16px;
+                    margin-bottom: 24px;
+                }
+
+                .marketplace-wrapper .sub-card {
+                    background-color: #eaf3fa;
+                    border-radius: 12px;
+                    height: 100px;
+                    padding: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                }
+
+                    .marketplace-wrapper .sub-card:nth-child(1) {
+                        background-color: #e6ebf0;
+                    }
+
+                    .marketplace-wrapper .sub-card:nth-child(2) {
+                        background-color: #f0f0f0;
+                    }
+
+                    .marketplace-wrapper .sub-card:nth-child(3) {
+                        background-color: #dbeaf8;
+                    }
+
+                    .marketplace-wrapper .sub-card:nth-child(4) {
+                        background-color: #ebebeb;
+                    }
+
+                    .marketplace-wrapper .sub-card .title {
+                        font-size: 14px;
+                        color: #555;
+                        max-width: 60%;
+                        line-height: 1.2;
+                    }
+
+                /* --- СЛАЙДЕР И ТОВАРЫ --- */
+                .marketplace-wrapper .slider-dots {
+                    display: flex;
+                    justify-content: center;
+                    gap: 8px;
+                    margin-bottom: 40px;
+                }
+
+                .marketplace-wrapper .dot {
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    background-color: #d1d5db;
+                }
+
+                    .marketplace-wrapper .dot.active {
+                        background-color: #3b5998;
+                    }
+
+                .marketplace-wrapper .section-title {
+                    font-size: 28px;
+                    color: #555;
+                    margin-bottom: 20px;
+                    font-weight: 600;
+                }
+
+                .marketplace-wrapper .products-row {
+                    display: flex;
+                    gap: 20px;
+                    overflow-x: auto;
+                    padding-bottom: 20px;
+                }
+
+                .marketplace-wrapper .product-item {
+                    min-width: 150px;
+                    height: 150px;
+                    background-color: #f8f8f8;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border: 1px solid #eee;
+                }
+
+                .marketplace-wrapper .img-placeholder {
+                    position: absolute;
+                    background: rgba(255,255,255,0.2);
+                    border-radius: 50%;
+                }
+    </style>
 </head>
 <body>
+    <div class="marketplace-wrapper">
+        <!-- Навигация -->
+        <nav class="top-nav">
+            <a href='@Url.Action("Gadgets", "Catalog")'>Гаджеты</a>
+            <a href='@Url.Action("Computers", "Catalog")'>Компьютеры</a>
+            <a href='@Url.Action("Photo", "Catalog")'>Фото</a>
+            <a href='@Url.Action("TV", "Catalog")'>TV</a>
+            <a href='@Url.Action("Audio", "Catalog")'>Аудио</a>
+            <a href='@Url.Action("Appliances", "Catalog")'>Бытовая техника</a>
+            <a href='@Url.Action("Climate", "Catalog")'>Климат</a>
+            <a href='@Url.Action("Home", "Catalog")'>Дом</a>
+            <a href='@Url.Action("Index", "Pars")'>Парсер</a>
+        </nav>
 
-    <!-- Шапка сайта -->
-    <header>
-        <div class="header-content">
-            <div class="logo">TechCatalog</div>
-            <div class="search">
-                <input type="text" placeholder="Поиск по товарам...">
-            </div>
-            <div class="cart">🛒 Корзина (0)</div>
+        <!-- Главные баннеры (Сетка) -->
+        <div class="main-banners">
+            <a href='@Url.Action("Appliances", "Catalog")' class="card card-washers" style="display:block; text-decoration:none; color:inherit;">
+                <div class="img-placeholder" style="width: 100px; height: 100px; left: -20px;"></div>
+                <div class="title">Стиральные<br>машины</div>
+            </a>
+            <a href='@Url.Action("Gadgets", "Catalog")' class="card card-watches" style="display:block; text-decoration:none; color:inherit;">
+                <div class="img-placeholder" style="width: 80px; height: 80px; left: 10px; background: #ccc;"></div>
+                <div class="title">Наручные<br>часы</div>
+            </a>
+            <a href='@Url.Action("Phones", "Catalog")' class="card card-smartphones" style="display:block; text-decoration:none; color:inherit;">
+                <div class="title">Смартфоны</div>
+                <div class="img-placeholder" style="width: 180px; height: 180px; bottom: -40px; background: rgba(0,0,0,0.1);"></div>
+            </a>
+            <a href='@Url.Action("Computers", "Catalog")' class="card card-computers" style="display:block; text-decoration:none; color:inherit;">
+                <div class="subtitle">Компьютерная</div>
+                <div class="title">техника</div>
+                <div class="img-placeholder" style="width: 200px; height: 150px; left: 20px; bottom: 20px; background: #ddd; border-radius: 10px;"></div>
+            </a>
         </div>
-    </header>
 
-    <div class="container">
-        <!-- Боковая панель с фильтрами -->
-        <aside class="sidebar">
-            <h3>Фильтры</h3>
+        <!-- Нижний ряд маленьких баннеров -->
+        <div class="sub-banners">
+            <div class="sub-card"><div class="title">Видео-<br>регистраторы</div></div>
+            <div class="sub-card"><div class="title">Wi-Fi доступ<br>по всему дому</div></div>
+            <div class="sub-card"><div class="title">Планшеты</div></div>
+            <div class="sub-card"><div class="title">Конструкторы<br>для всех возрастов</div></div>
+        </div>
 
-            <div class="filter-group">
-                <h4>Цена</h4>
-                <input type="range" min="0" max="1000000" value="500000">
-                <div>до <strong>500 000 ₸</strong></div>
-            </div>
+        <!-- Точки переключения -->
+        <div class="slider-dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
 
-            <div class="filter-group">
-                <h4>Бренды</h4>
-                <label><input type="checkbox"> Samsung</label>
-                <label><input type="checkbox"> Apple</label>
-                <label><input type="checkbox"> Xiaomi</label>
-                <label><input type="checkbox"> Huawei</label>
-            </div>
-
-            <div class="filter-group">
-                <h4>Категории</h4>
-                <label><input type="checkbox"> Смартфоны</label>
-                <label><input type="checkbox"> Ноутбуки</label>
-                <label><input type="checkbox"> Телевизоры</label>
-                <label><input type="checkbox"> Наушники</label>
-            </div>
-        </aside>
-
-        <!-- Основной контент: товары -->
-        <main class="content">
-            <h2>Смартфоны</h2>
-            <div class="products-grid">
-                <!-- Пример карточки товара -->
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="" alt="Товар 1">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-title">Samsung Galaxy S23</div>
-                        <div class="product-price">450</div>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="" alt="Товар 2">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-title">iPhone 15 Pro</div>
-                        <div class="product-price">890</div>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="" alt="Товар 3">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-title">Xiaomi Redmi Note</div>
-                        <div class="product-price">220 </div>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="" alt="Товар 4">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-title">Huawei P60</div>
-                        <div class="product-price">380</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Пагинация -->
-            <div class="pagination">
-                <a href="#" class="active">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">→</a>
-            </div>
-        </main>
+        <!-- Популярные модели -->
+        <h2 class="section-title">Популярные модели</h2>
+        <div class="products-row">
+            <div class="product-item">Товар 1</div>
+            <div class="product-item">Товар 2</div>
+            <div class="product-item">Товар 3</div>
+            <div class="product-item">Товар 4</div>
+            <div class="product-item">Товар 5</div>
+            <div class="product-item">Товар 6</div>
+        </div>
     </div>
-
-    <!-- Подвал -->
-    <footer>
-        &copy; 2025 TechCatalog — Каталог электроники Казахстана
-    </footer>
-
 </body>
 </html>
