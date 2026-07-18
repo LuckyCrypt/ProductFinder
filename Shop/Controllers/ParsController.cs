@@ -1,9 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ParsElements.Models;
-using System.Threading.Tasks;
 
 namespace Shop.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ParsController : Controller
     {
         public IActionResult Index()
@@ -12,21 +12,20 @@ namespace Shop.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> LogHistory()
+        [ValidateAntiForgeryToken]
+        public IActionResult LogHistory()
         {
-            // Вызов метода из ParsElements
-            //var db = new DatabaseManager("localhost", "postgres", "2028", "postgres");
-            //await db.LogHistory();
-            TempData["ParsMessage"] = "LogHistory выполнен";
+            // TODO (фаза парсера): вызвать реальный парсер техники и записать результат в БД.
+            TempData["ParsMessage"] = "LogHistory выполнен (заглушка)";
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public async Task<IActionResult> LogToDb()
+        [ValidateAntiForgeryToken]
+        public IActionResult LogToDb()
         {
-/*            var db = new DatabaseManager("localhost", "postgres", "2028", "postgres");
-            await db.LogToDb("Вызов LogToDb из веб-интерфейса");*/
-            TempData["ParsMessage"] = "LogToDb выполнен";
+            // TODO (фаза парсера): подключить запуск парсинга из веб-интерфейса.
+            TempData["ParsMessage"] = "LogToDb выполнен (заглушка)";
             return RedirectToAction("Index");
         }
     }

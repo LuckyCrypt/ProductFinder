@@ -1,75 +1,57 @@
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Shop.Domain.Entities;
+using Shop.Services;
+using Shop.ViewModels;
 
 namespace Shop.Controllers
 {
     public class CatalogController : Controller
     {
-        private readonly Shop.Repository.DataFromSqlRepository _repo;
+        private readonly ICatalogService _catalog;
 
-        public CatalogController(Shop.Repository.DataFromSqlRepository repo)
+        public CatalogController(ICatalogService catalog)
         {
-            _repo = repo;
+            _catalog = catalog;
         }
 
-        public IActionResult Gadgets()
+        // Действия меню отображают общую страницу категории по slug.
+        public Task<IActionResult> Gadgets(string? sort) => CategoryPage("gadgets", "Гаджеты", sort);
+        public Task<IActionResult> Phones(string? sort) => CategoryPage("phones", "Мобильные телефоны", sort);
+        public Task<IActionResult> Computers(string? sort) => CategoryPage("computers", "Компьютеры", sort);
+        public Task<IActionResult> Photo(string? sort) => CategoryPage("photo", "Фото", sort);
+        public Task<IActionResult> TV(string? sort) => CategoryPage("tv", "TV", sort);
+        public Task<IActionResult> Audio(string? sort) => CategoryPage("audio", "Аудио", sort);
+        public Task<IActionResult> Appliances(string? sort) => CategoryPage("appliances", "Бытовая техника", sort);
+        public Task<IActionResult> Climate(string? sort) => CategoryPage("climate", "Климат", sort);
+        public Task<IActionResult> Home(string? sort) => CategoryPage("home", "Дом", sort);
+
+        // Обобщённый маршрут по slug: /Catalog/Category/noutbuki
+        public Task<IActionResult> Category(string slug, string? sort) => CategoryPage(slug, slug, sort);
+
+        // Карточка товара со всеми офферами: /Catalog/Product/5
+        public async Task<IActionResult> Product(int id)
         {
-            ViewData["Title"] = "Гаджеты";
-            return View();
+            var product = await _catalog.GetProductWithOffersAsync(id);
+            if (product is null)
+                return NotFound();
+
+            ViewData["Title"] = product.Name;
+            return View(product);
         }
 
-        public IActionResult Phones()
+        private async Task<IActionResult> CategoryPage(string slug, string title, string? sort)
         {
-            ViewData["Title"] = "Мобильные телефоны";
-            var phones = new List<Phone>
+            var products = await _catalog.GetProductsByCategoryAsync(slug, sort);
+            var category = await _catalog.GetCategoryBySlugAsync(slug);
+
+            var vm = new CatalogPageViewModel
             {
-                new Phone { Id = 1, Name = "iPhone 13 Pro", Subtitle = "Apple", Storage = "128GB", Ram = "6GB", Year = 2021, Tags = "smartphone,apple,ios", Screen = "6.1 inch", Camera = "12MP", Battery = "3095mAh", PriceMin = 999.99m, PriceMax = 1299.99m, ImageUrl = "https://example.com/iphone13pro.jpg" },
-                new Phone { Id = 2, Name = "Samsung Galaxy S21", Subtitle = "Samsung", Storage = "128GB", Ram = "8GB", Year = 2021, Tags = "smartphone,samsung,android", Screen = "6.2 inch", Camera = "64MP", Battery = "4000mAh", PriceMin = 799.99m, PriceMax = 999.99m, ImageUrl = "https://example.com/galaxys21.jpg" },
+                Title = category?.Name ?? title,
+                Slug = slug,
+                Sort = sort,
+                Products = products
             };
-            return View(phones);
-        }
-
-        public IActionResult Computers()
-        {
-            ViewData["Title"] = "Компьютеры";
-            return View();
-        }
-
-        public IActionResult Photo()
-        {
-            ViewData["Title"] = "Фото";
-            return View();
-        }
-
-        public IActionResult TV()
-        {
-            ViewData["Title"] = "TV";
-            return View();
-        }
-
-        public IActionResult Audio()
-        {
-            ViewData["Title"] = "Аудио";
-            return View();
-        }
-
-        public IActionResult Appliances()
-        {
-            ViewData["Title"] = "Бытовая техника";
-            return View();
-        }
-
-        public IActionResult Climate()
-        {
-            ViewData["Title"] = "Климат";
-            return View();
-        }
-
-        public IActionResult Home()
-        {
-            ViewData["Title"] = "Дом";
-            return View();
+            ViewData["Title"] = vm.Title;
+            return View("Category", vm);
         }
     }
 }

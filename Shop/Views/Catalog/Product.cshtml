@@ -1,0 +1,82 @@
+@model Shop.Domain.Entities.Product
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = Model.Name;
+    var offers = Model.Offers.OrderBy(o => o.Price).ToList();
+}
+
+<div class="product-page">
+    <a class="back-link" href="javascript:history.back()">← Назад к списку</a>
+
+    <div class="product-top">
+        <div class="product-image">
+            <img src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "/img/placeholder-phone-1.png" : Model.ImageUrl)" alt="@Model.Name">
+        </div>
+        <div class="product-info">
+            <h1>@Model.Name</h1>
+            @if (!string.IsNullOrEmpty(Model.Brand)) { <p class="brand">@Model.Brand@(Model.Year.HasValue ? $" · {Model.Year}" : "")</p> }
+            @if (Model.PriceMin.HasValue)
+            {
+                <div class="price-range">
+                    от <b>@Model.PriceMin.Value.ToString("N0")</b>
+                    @if (Model.PriceMax.HasValue && Model.PriceMax != Model.PriceMin) { <text>до <b>@Model.PriceMax.Value.ToString("N0")</b></text> }
+                    грн
+                </div>
+            }
+
+            <h3>Предложения магазинов</h3>
+            <table class="offers-table">
+                <thead><tr><th>Магазин</th><th>Наличие</th><th>Цена</th><th></th></tr></thead>
+                <tbody>
+                @foreach (var o in offers)
+                {
+                    <tr>
+                        <td>@o.Store?.Name</td>
+                        <td>@(o.InStock ? "в наличии" : "нет")</td>
+                        <td class="price">@o.Price.ToString("N0") грн</td>
+                        <td><a class="go-btn" href="@o.ProductUrl" target="_blank" rel="noopener nofollow">Перейти</a></td>
+                    </tr>
+                }
+                @if (!offers.Any())
+                {
+                    <tr><td colspan="4">Предложений пока нет.</td></tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @if (Model.Specifications.Any())
+    {
+        <h3>Характеристики</h3>
+        <table class="spec-table">
+            @foreach (var g in Model.Specifications.GroupBy(s => s.Group))
+            {
+                if (!string.IsNullOrEmpty(g.Key)) { <tr class="spec-group"><td colspan="2">@g.Key</td></tr> }
+                foreach (var s in g)
+                {
+                    <tr><td class="spec-name">@s.Name</td><td>@s.Value</td></tr>
+                }
+            }
+        </table>
+    }
+</div>
+
+<style>
+    .product-page{padding:20px;max-width:1000px}
+    .back-link{color:var(--link,#2b4b85);text-decoration:none;font-size:14px}
+    .product-top{display:flex;gap:24px;margin-top:16px;flex-wrap:wrap}
+    .product-image{width:280px;flex-shrink:0}
+    .product-image img{width:100%;border-radius:10px;border:1px solid var(--border,#eee)}
+    .product-info{flex:1;min-width:280px}
+    .product-info h1{margin:0 0 4px;font-size:26px}
+    .product-info .brand{color:#888;margin:0 0 12px}
+    .price-range{color:#d9534f;font-weight:600;font-size:22px;margin-bottom:16px}
+    .offers-table,.spec-table{width:100%;border-collapse:collapse;margin-top:8px}
+    .offers-table th,.offers-table td,.spec-table td{padding:8px;border-bottom:1px solid var(--border,#eee);text-align:left}
+    .offers-table .price{font-weight:600;white-space:nowrap}
+    .go-btn{display:inline-block;background:var(--accent,#3650a6);color:#fff;padding:5px 12px;border-radius:6px;text-decoration:none;font-size:13px}
+    .spec-table .spec-group td{font-weight:600;background:var(--tag-bg,#f3f6fb)}
+    .spec-table .spec-name{color:#777;width:40%}
+    h3{margin-top:24px}
+</style>

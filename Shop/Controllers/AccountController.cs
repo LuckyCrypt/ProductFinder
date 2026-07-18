@@ -1,95 +1,78 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Shop.Models.Account;
-using System.Security.Claims;
-using Shop.Domain;
+using Shop.Data;
 using Shop.Domain.Entities;
-using Shop.Database;
+using Shop.Models.Account;
 
 namespace Shop.Controllers
 {
-	public class AccountController : Controller
+    public class AccountController : Controller
     {
-		private readonly DBContext _context;
-		public IActionResult Index()
-		{
-			return View();
-		}
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-		public AccountController(DBContext context)
-		{
-			_context = context;
-		}
+        public AccountController(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
 
-        public async Task<IActionResult> LoginAsync([Bind(Prefix = "l")] LoginViewModel model)
+        [HttpGet]
+        public IActionResult Index() => View();
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login([Bind(Prefix = "l")] LoginViewModel model)
         {
             if (!ModelState.IsValid)
-            {
-                return View("Index", new AccountViewModel
-                {
-                    LoginViewModel = model
-                });
-            }
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == model.Login && u.Password == model.Password);
+                return View("Index", new AccountViewModel { LoginViewModel = model });
 
-            if (user is null)
+            var result = await _signInManager.PasswordSignInAsync(
+                model.Login, model.Password, isPersistent: true, lockoutOnFailure: false);
+
+            if (!result.Succeeded)
             {
                 ViewBag.Error = "Некорректные логин и(или) пароль!";
-                return View("Index", new AccountViewModel
-                {
-                    LoginViewModel = model
-                });
-            }
-            await AuthenticateAsync(user);
-			return RedirectToAction("Index","Home");
-        }
-
-        private async Task AuthenticateAsync(User user)
-        {
-			var claims = new List<Claim>
-			{
-				new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
-				new Claim(ClaimsIdentity.DefaultNameClaimType,user.Login)
-			};
-			var id = new ClaimsIdentity(claims,"applicationCookie",ClaimsIdentity.DefaultNameClaimType,ClaimsIdentity.DefaultRoleClaimType);
-			await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,new ClaimsPrincipal(id));
-        }
-
-
-		public async Task<IActionResult> RegisterAsync([Bind(Prefix = "r")] RegisterViewModel model)
-		{
-            if (!ModelState.IsValid)
-            {
-                return View("Index", new AccountViewModel
-                {
-					RegisterViewModel = model
-                });
-            }
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == model.Login);
-
-            if (user is not null)
-            {
-                ViewBag.Error = "Пользователь с таким логином уже существует!";
-                return View("Index", new AccountViewModel
-                {
-                    RegisterViewModel = model
-                });
+                return View("Index", new AccountViewModel { LoginViewModel = model });
             }
 
-			user = new User(model.Login,model.Password);
-			_context.Users.Add(user);
-			await _context.SaveChangesAsync();
-
-            await AuthenticateAsync(user);
             return RedirectToAction("Index", "Home");
         }
-		public async Task<IActionResult> LogoutAsync()
-		{
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Account");
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register([Bind(Prefix = "r")] RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View("Index", new AccountViewModel { RegisterViewModel = model });
+
+            var user = new ApplicationUser
+            {
+                UserName = model.Login,
+                Email = model.Email,
+                FirstName = model.FirstName
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+            {
+                ViewBag.Error = string.Join(" ", result.Errors.Select(e => e.Description));
+                return View("Index", new AccountViewModel { RegisterViewModel = model });
+            }
+
+            await _userManager.AddToRoleAsync(user, DbSeeder.ClientRole);
+            await _signInManager.SignInAsync(user, isPersistent: true);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }
- 

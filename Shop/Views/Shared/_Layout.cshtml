@@ -14,34 +14,6 @@
    
 </head>
 <body>
-    @* <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Мой Магазин</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Товары</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Cart" asp-action="Index">
-                                <i class="bi bi-cart"></i> Корзина
-                            </a>
-                        </li>
-                        <!-- Здесь можно добавить кнопки для входа/регистрации -->
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header> *@
     <header class="header" id="mainHeader">
         <a href="/" class="logo">LuckyCatalog</a>
 
@@ -57,14 +29,34 @@
         </button>
 
         <div class="header-icons">
-            <a href="/cart" class="icon-link">
-                <span class="icon">🛒</span>
-                <span>Корзина</span>
-            </a>
-            <a href="/account" class="icon-link">
-                <span class="icon">👤</span>
-                <span>Личный кабинет</span>
-            </a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-controller="Pars" asp-action="Index" class="icon-link">
+                    <span class="icon">🛠️</span>
+                    <span>Админ</span>
+                </a>
+            }
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                <a href="/account" class="icon-link">
+                    <span class="icon">👤</span>
+                    <span>@(User.Identity.Name)</span>
+                </a>
+                <form asp-controller="Account" asp-action="Logout" method="post" class="logout-form" style="display:inline">
+                    <button type="submit" class="icon-link logout-btn" title="Выйти"
+                            style="background:none;border:none;cursor:pointer;font:inherit;color:inherit;padding:0">
+                        <span class="icon">🚪</span>
+                        <span>Выйти</span>
+                    </button>
+                </form>
+            }
+            else
+            {
+                <a href="/account" class="icon-link">
+                    <span class="icon">👤</span>
+                    <span>Личный кабинет</span>
+                </a>
+            }
         </div>
     </header>
 

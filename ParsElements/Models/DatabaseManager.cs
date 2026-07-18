@@ -11,6 +11,12 @@ namespace ParsElements.Models
             _connectionString = $"Host={host};Username={user};Password={password};Database={dbname};Pooling=true;";
         }
 
+        /// <summary>Прямая передача строки подключения (без хранения пароля в коде).</summary>
+        public DatabaseManager(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
         public async Task LogToDb(string message, int userId = 1)
         {
             try

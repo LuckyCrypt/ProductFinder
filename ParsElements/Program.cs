@@ -15,7 +15,15 @@ namespace AvitoScraper
             //.WriteTo.File("avito_scraper.log")
             //.CreateLogger();
 
-            var db = new DatabaseManager("localhost", "postgres", "2028", "postgres");
+            // Строку подключения берём из окружения, чтобы не хранить пароль в коде.
+            var connectionString = Environment.GetEnvironmentVariable("PRODUCTFINDER_DB");
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                Log.Error("Не задана переменная окружения PRODUCTFINDER_DB со строкой подключения к БД.");
+                return;
+            }
+
+            var db = new DatabaseManager(connectionString);
             await db.LogHistory();
 
             //await RunScraper(db);

@@ -1,37 +1,26 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shop.Repository;
+using Shop.Services;
 using Shop.ViewModels;
 using System.Diagnostics;
 
 namespace Shop.Controllers
 {
-	[Authorize]
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
+		private readonly ICatalogService _catalog;
 
-		public HomeController(ILogger<HomeController> logger)
+		public HomeController(ILogger<HomeController> logger, ICatalogService catalog)
 		{
 			_logger = logger;
+			_catalog = catalog;
 		}
 
-        public async Task<IActionResult> Index([FromServices] DataFromSqlRepository dataFromSql)
-        {
-			var _products = await dataFromSql.GetRentAparts();	
-            return View(_products);
-        }
-
-		//public IActionResult Details(int id)
-		//{
-  //          var _products = await dataFromSql.GetRentAparts();
-  //          var product = _products.FirstOrDefault(p => p.Id == id);
-		//	if (product == null)
-		//	{
-		//		return NotFound();
-		//	}
-		//	return View(product);
-		//}
+		public async Task<IActionResult> Index()
+		{
+			var products = await _catalog.GetFeaturedProductsAsync(8);
+			return View(products);
+		}
 
 		public IActionResult Privacy()
 		{
