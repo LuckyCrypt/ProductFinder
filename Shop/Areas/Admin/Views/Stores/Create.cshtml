@@ -1,0 +1,25 @@
+@model Shop.Areas.Admin.Models.StoreFormModel
+@{ ViewData["Title"] = "Новый магазин"; }
+
+<h1>Новый магазин</h1>
+
+<div class="card-form">
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="SiteUrl" class="form-label"></label>
+            <input asp-for="SiteUrl" class="form-control" placeholder="https://rozetka.com.ua" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="LogoUrl" class="form-label"></label>
+            <input asp-for="LogoUrl" class="form-control" placeholder="🛍️ или URL" />
+        </div>
+        <button type="submit" class="btn btn-primary">Создать</button>
+        <a class="btn btn-link" asp-action="Index">Отмена</a>
+    </form>
+</div>

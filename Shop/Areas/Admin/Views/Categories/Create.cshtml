@@ -1,0 +1,32 @@
+@model Shop.Areas.Admin.Models.CategoryFormModel
+@{ ViewData["Title"] = "Новая категория"; }
+
+<h1>Новая категория</h1>
+
+<div class="card-form">
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Slug" class="form-label"></label>
+            <input asp-for="Slug" class="form-control" placeholder="noutbuki" />
+            <span asp-validation-for="Slug" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="IconOrImage" class="form-label"></label>
+            <input asp-for="IconOrImage" class="form-control" placeholder="💻" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="ParentCategoryId" class="form-label"></label>
+            <select asp-for="ParentCategoryId" asp-items="@((List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)ViewBag.Parents)" class="form-select">
+                <option value="">— нет (корневая) —</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Создать</button>
+        <a class="btn btn-link" asp-action="Index">Отмена</a>
+    </form>
+</div>

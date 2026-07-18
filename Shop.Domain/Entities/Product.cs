@@ -31,5 +31,24 @@ namespace Shop.Domain.Entities
 
         public ICollection<ProductSpecification> Specifications { get; set; } = new List<ProductSpecification>();
         public ICollection<Offer> Offers { get; set; } = new List<Offer>();
+
+        /// <summary>
+        /// Пересчитывает кэш-диапазон цен из текущих офферов.
+        /// Вызывать после любого изменения набора офферов (сидер, админ, импорт парсера).
+        /// Требует, чтобы коллекция <see cref="Offers"/> была загружена.
+        /// </summary>
+        public void RecomputePriceRange()
+        {
+            if (Offers != null && Offers.Count > 0)
+            {
+                PriceMin = Offers.Min(o => o.Price);
+                PriceMax = Offers.Max(o => o.Price);
+            }
+            else
+            {
+                PriceMin = null;
+                PriceMax = null;
+            }
+        }
     }
 }

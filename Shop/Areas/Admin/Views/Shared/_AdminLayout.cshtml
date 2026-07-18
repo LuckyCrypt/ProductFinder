@@ -1,0 +1,56 @@
+@{
+    string Active(string ctrl) =>
+        string.Equals((string?)ViewContext.RouteData.Values["controller"], ctrl, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — Админ · LuckyCatalog</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <style>
+        body { margin: 0; background: #f4f6fa; font-family: -apple-system, "Segoe UI", Roboto, sans-serif; }
+        .admin-wrap { display: flex; min-height: 100vh; }
+        .admin-side { width: 230px; background: #1f2937; color: #cbd5e1; flex-shrink: 0; }
+        .admin-side .brand { padding: 18px 20px; font-size: 18px; font-weight: 700; color: #fff; border-bottom: 1px solid #374151; }
+        .admin-side a { display: block; padding: 12px 20px; color: #cbd5e1; text-decoration: none; }
+        .admin-side a:hover { background: #374151; color: #fff; }
+        .admin-side a.active { background: #2563eb; color: #fff; }
+        .admin-main { flex: 1; padding: 24px 32px; min-width: 0; }
+        .admin-main h1 { font-size: 24px; margin: 0 0 20px; }
+        table.grid { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; }
+        table.grid th, table.grid td { padding: 10px 12px; border-bottom: 1px solid #eef1f5; text-align: left; }
+        table.grid th { background: #f8fafc; font-size: 13px; color: #64748b; }
+        .btn-sm { padding: 4px 10px; font-size: 13px; }
+        .card-form { background: #fff; padding: 20px; border-radius: 8px; max-width: 720px; }
+        .stat-row { display: flex; gap: 16px; flex-wrap: wrap; }
+        .stat { background: #fff; border-radius: 8px; padding: 18px 22px; min-width: 150px; }
+        .stat .n { font-size: 28px; font-weight: 700; color: #2563eb; }
+        .stat .l { color: #64748b; font-size: 14px; }
+        .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+    </style>
+</head>
+<body>
+    <div class="admin-wrap">
+        <nav class="admin-side">
+            <div class="brand">🛠️ LuckyCatalog</div>
+            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="@Active("Dashboard")">Дашборд</a>
+            <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="@Active("Products")">Товары</a>
+            <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="@Active("Categories")">Категории</a>
+            <a asp-area="Admin" asp-controller="Stores" asp-action="Index" class="@Active("Stores")">Магазины</a>
+            <a asp-area="Admin" asp-controller="Import" asp-action="Index" class="@Active("Import")">Импорт цен</a>
+            <a asp-area="" asp-controller="Home" asp-action="Index">← На сайт</a>
+        </nav>
+        <main class="admin-main">
+            @if (TempData["Ok"] != null)
+            {
+                <div class="alert alert-success">@TempData["Ok"]</div>
+            }
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

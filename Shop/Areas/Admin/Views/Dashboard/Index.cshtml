@@ -1,0 +1,16 @@
+@model Shop.Areas.Admin.Models.DashboardViewModel
+@{ ViewData["Title"] = "Дашборд"; }
+
+<h1>Панель администратора</h1>
+
+<div class="stat-row">
+    <div class="stat"><div class="n">@Model.Products</div><div class="l">Товары</div></div>
+    <div class="stat"><div class="n">@Model.Offers</div><div class="l">Офферы</div></div>
+    <div class="stat"><div class="n">@Model.Categories</div><div class="l">Категории</div></div>
+    <div class="stat"><div class="n">@Model.Stores</div><div class="l">Магазины</div></div>
+</div>
+
+<p class="mt-4">
+    <a class="btn btn-primary" asp-controller="Products" asp-action="Create">+ Добавить товар</a>
+    <a class="btn btn-outline-secondary" asp-controller="Import" asp-action="Index">Импорт цен</a>
+</p>

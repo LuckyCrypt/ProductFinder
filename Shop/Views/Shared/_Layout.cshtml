@@ -31,7 +31,7 @@
         <div class="header-icons">
             @if (User.IsInRole("Admin"))
             {
-                <a asp-controller="Pars" asp-action="Index" class="icon-link">
+                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="icon-link">
                     <span class="icon">🛠️</span>
                     <span>Админ</span>
                 </a>

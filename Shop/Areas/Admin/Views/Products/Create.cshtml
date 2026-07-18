@@ -1,0 +1,44 @@
+@model Shop.Areas.Admin.Models.ProductFormModel
+@{ ViewData["Title"] = "Новый товар"; }
+
+<h1>Новый товар</h1>
+
+<div class="card-form">
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Brand" class="form-label"></label>
+            <input asp-for="Brand" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="CategoryId" class="form-label"></label>
+            <select asp-for="CategoryId" asp-items="@((List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)ViewBag.Categories)" class="form-select">
+                <option value="">— выберите —</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Year" class="form-label"></label>
+            <input asp-for="Year" class="form-control" type="number" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Tags" class="form-label"></label>
+            <input asp-for="Tags" class="form-control" placeholder="игровой,165 Гц,DDR5" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="ImageUrl" class="form-label"></label>
+            <input asp-for="ImageUrl" class="form-control" placeholder="https://…/image.jpg" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Создать и перейти к офферам</button>
+        <a class="btn btn-link" asp-action="Index">Отмена</a>
+    </form>
+</div>

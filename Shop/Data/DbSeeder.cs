@@ -169,8 +169,7 @@ namespace Shop.Data
                     });
                 }
 
-                product.PriceMin = product.Offers.Min(o => o.Price);
-                product.PriceMax = product.Offers.Max(o => o.Price);
+                product.RecomputePriceRange();
                 context.Products.Add(product);
             }
 

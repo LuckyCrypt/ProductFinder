@@ -1,0 +1,31 @@
+@model List<Shop.Domain.Entities.Category>
+@{ ViewData["Title"] = "Категории"; }
+
+<div class="topbar">
+    <h1>Категории</h1>
+    <a class="btn btn-primary" asp-action="Create">+ Категория</a>
+</div>
+
+<table class="grid">
+    <thead>
+        <tr><th>Название</th><th>Slug</th><th>Родитель</th><th>Иконка</th><th></th></tr>
+    </thead>
+    <tbody>
+    @foreach (var c in Model)
+    {
+        <tr>
+            <td>@c.Name</td>
+            <td><code>@c.Slug</code></td>
+            <td>@(c.Parent?.Name ?? "—")</td>
+            <td>@c.IconOrImage</td>
+            <td>
+                <a class="btn btn-outline-primary btn-sm" asp-action="Edit" asp-route-id="@c.Id">Изм.</a>
+                <form asp-action="Delete" asp-route-id="@c.Id" method="post" style="display:inline"
+                      onsubmit="return confirm('Удалить категорию?');">
+                    <button class="btn btn-outline-danger btn-sm" type="submit">Удл.</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

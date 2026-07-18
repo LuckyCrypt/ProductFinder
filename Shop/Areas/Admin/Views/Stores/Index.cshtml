@@ -1,0 +1,30 @@
+@model List<Shop.Domain.Entities.Store>
+@{ ViewData["Title"] = "Магазины"; }
+
+<div class="topbar">
+    <h1>Магазины</h1>
+    <a class="btn btn-primary" asp-action="Create">+ Магазин</a>
+</div>
+
+<table class="grid">
+    <thead>
+        <tr><th>Название</th><th>Сайт</th><th>Логотип</th><th></th></tr>
+    </thead>
+    <tbody>
+    @foreach (var s in Model)
+    {
+        <tr>
+            <td>@s.Name</td>
+            <td>@s.SiteUrl</td>
+            <td>@s.LogoUrl</td>
+            <td>
+                <a class="btn btn-outline-primary btn-sm" asp-action="Edit" asp-route-id="@s.Id">Изм.</a>
+                <form asp-action="Delete" asp-route-id="@s.Id" method="post" style="display:inline"
+                      onsubmit="return confirm('Удалить магазин?');">
+                    <button class="btn btn-outline-danger btn-sm" type="submit">Удл.</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

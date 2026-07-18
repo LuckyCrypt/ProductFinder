@@ -1,0 +1,163 @@
+@model Shop.Areas.Admin.Models.ProductEditViewModel
+@{
+    ViewData["Title"] = Model.Product.Name;
+    var stores = Model.Stores;
+}
+
+<div class="topbar">
+    <h1>@Model.Product.Name</h1>
+    <div>
+        <a class="btn btn-outline-secondary btn-sm" asp-area="" asp-controller="Catalog" asp-action="Product" asp-route-id="@Model.Product.Id" target="_blank">Открыть на сайте ↗</a>
+        <a class="btn btn-link btn-sm" asp-action="Index">← К списку</a>
+    </div>
+</div>
+
+<div style="display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start;">
+    <!-- Основные поля -->
+    <div class="card-form" style="flex:1; min-width:340px;">
+        <h5>Основное</h5>
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Form.Id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="Form.Name" class="form-label"></label>
+                <input asp-for="Form.Name" class="form-control" />
+                <span asp-validation-for="Form.Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Form.Brand" class="form-label"></label>
+                <input asp-for="Form.Brand" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Form.CategoryId" class="form-label"></label>
+                <select asp-for="Form.CategoryId" asp-items="Model.Categories" class="form-select"></select>
+                <span asp-validation-for="Form.CategoryId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Form.Year" class="form-label"></label>
+                <input asp-for="Form.Year" class="form-control" type="number" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Form.Tags" class="form-label"></label>
+                <input asp-for="Form.Tags" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Form.ImageUrl" class="form-label"></label>
+                <input asp-for="Form.ImageUrl" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Form.Description" class="form-label"></label>
+                <textarea asp-for="Form.Description" class="form-control" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+    </div>
+
+    <!-- Офферы и характеристики -->
+    <div style="flex:1; min-width:340px; display:flex; flex-direction:column; gap:24px;">
+        <div class="card-form">
+            <h5>Офферы магазинов
+                <span class="text-muted" style="font-size:14px;font-weight:400">
+                    (диапазон: @(Model.Product.PriceMin?.ToString("N0") ?? "—")@(Model.Product.PriceMax.HasValue && Model.Product.PriceMax != Model.Product.PriceMin ? " … " + Model.Product.PriceMax.Value.ToString("N0") : "") грн)
+                </span>
+            </h5>
+            <table class="grid" style="margin-bottom:14px">
+                <thead><tr><th>Магазин</th><th>Цена</th><th>Наличие</th><th></th></tr></thead>
+                <tbody>
+                @foreach (var o in Model.Product.Offers.OrderBy(o => o.Price))
+                {
+                    <tr>
+                        <td>@o.Store?.Name</td>
+                        <td>@o.Price.ToString("N0")</td>
+                        <td>@(o.InStock ? "да" : "нет")</td>
+                        <td>
+                            <form asp-action="DeleteOffer" asp-route-id="@Model.Product.Id" method="post" style="display:inline">
+                                <input type="hidden" name="offerId" value="@o.Id" />
+                                <button class="btn btn-outline-danger btn-sm" type="submit">✕</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Product.Offers.Any())
+                {
+                    <tr><td colspan="4" class="text-muted">Офферов пока нет</td></tr>
+                }
+                </tbody>
+            </table>
+
+            @if (stores.Any())
+            {
+                <form asp-action="AddOffer" asp-route-id="@Model.Product.Id" method="post" class="row g-2 align-items-end">
+                    <div class="col">
+                        <label class="form-label">Магазин</label>
+                        <select name="StoreId" asp-items="stores" class="form-select form-select-sm"></select>
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Цена, грн</label>
+                        <input name="Price" type="number" step="1" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Ссылка</label>
+                        <input name="ProductUrl" class="form-control form-control-sm" placeholder="https://…" />
+                    </div>
+                    <div class="col-auto form-check ms-2">
+                        <input name="InStock" value="true" checked type="checkbox" class="form-check-input" id="ins" />
+                        <label class="form-check-label" for="ins">В наличии</label>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-success btn-sm">+ Оффер</button>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <p class="text-muted">Сначала добавьте хотя бы один <a asp-controller="Stores" asp-action="Create">магазин</a>.</p>
+            }
+        </div>
+
+        <div class="card-form">
+            <h5>Характеристики</h5>
+            <table class="grid" style="margin-bottom:14px">
+                <thead><tr><th>Группа</th><th>Название</th><th>Значение</th><th></th></tr></thead>
+                <tbody>
+                @foreach (var s in Model.Product.Specifications)
+                {
+                    <tr>
+                        <td>@s.Group</td>
+                        <td>@s.Name</td>
+                        <td>@s.Value</td>
+                        <td>
+                            <form asp-action="DeleteSpec" asp-route-id="@Model.Product.Id" method="post" style="display:inline">
+                                <input type="hidden" name="specId" value="@s.Id" />
+                                <button class="btn btn-outline-danger btn-sm" type="submit">✕</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Product.Specifications.Any())
+                {
+                    <tr><td colspan="4" class="text-muted">Характеристик пока нет</td></tr>
+                }
+                </tbody>
+            </table>
+
+            <form asp-action="AddSpec" asp-route-id="@Model.Product.Id" method="post" class="row g-2 align-items-end">
+                <div class="col">
+                    <label class="form-label">Группа</label>
+                    <input name="Group" class="form-control form-control-sm" placeholder="Дисплей" />
+                </div>
+                <div class="col">
+                    <label class="form-label">Название</label>
+                    <input name="Name" class="form-control form-control-sm" placeholder="Диагональ" />
+                </div>
+                <div class="col">
+                    <label class="form-label">Значение</label>
+                    <input name="Value" class="form-control form-control-sm" placeholder="16&quot;" />
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-success btn-sm">+ Спека</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
