@@ -1,0 +1,47 @@
+@model Shop.Models.Cabinet.ProfileViewModel
+@{
+    ViewData["Title"] = "Личный кабинет";
+}
+
+<div class="cabinet">
+    <div class="cabinet-nav">
+        <a class="active" asp-controller="Cabinet" asp-action="Index">Профиль</a>
+        <a asp-controller="Cabinet" asp-action="Favorites">Избранное</a>
+        <a asp-controller="Cabinet" asp-action="ChangePassword">Сменить пароль</a>
+    </div>
+
+    <h1>Профиль</h1>
+
+    @if (TempData["Ok"] != null)
+    {
+        <div class="alert alert-success">@TempData["Ok"]</div>
+    }
+
+    <div class="cabinet-card">
+        <form asp-action="Index" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="UserName" class="form-label"></label>
+                <input asp-for="UserName" class="form-control" readonly />
+            </div>
+            <div class="mb-3">
+                <label asp-for="FirstName" class="form-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .cabinet{max-width:640px;margin:0 auto}
+    .cabinet-nav{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+    .cabinet-nav a{padding:8px 14px;border-radius:6px;text-decoration:none;color:var(--link,#334);background:var(--tag-bg,#f0f3f9)}
+    .cabinet-nav a.active{background:var(--accent,#3650a6);color:#fff}
+    .cabinet-card{background:var(--card-bg,#fff);border:1px solid var(--border,#eee);border-radius:8px;padding:20px}
+</style>

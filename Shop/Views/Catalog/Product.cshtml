@@ -24,6 +24,18 @@
                 </div>
             }
 
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                var isFav = ViewBag.IsFavorite == true;
+                <form asp-controller="Cabinet" asp-action="ToggleFavorite" method="post" style="margin-bottom:16px">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <input type="hidden" name="returnUrl" value="@(Context.Request.Path + Context.Request.QueryString)" />
+                    <button type="submit" class="fav-btn @(isFav ? "on" : "")">
+                        @(isFav ? "♥ В избранном" : "♡ В избранное")
+                    </button>
+                </form>
+            }
+
             <h3>Предложения магазинов</h3>
             <table class="offers-table">
                 <thead><tr><th>Магазин</th><th>Наличие</th><th>Цена</th><th></th></tr></thead>

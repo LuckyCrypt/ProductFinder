@@ -9,8 +9,11 @@ namespace Shop.Services
 
         Task<Category?> GetCategoryBySlugAsync(string slug);
 
-        /// <summary>Товары категории по slug с офферами; sort: "price" | "popularity".</summary>
-        Task<List<Product>> GetProductsByCategoryAsync(string slug, string? sort = null);
+        /// <summary>Товары категории (и её подкатегорий) по slug с офферами и фильтром.</summary>
+        Task<List<Product>> GetProductsByCategoryAsync(string slug, CatalogFilter? filter = null);
+
+        /// <summary>Уникальные бренды товаров категории (для фильтра).</summary>
+        Task<List<string>> GetBrandsForCategoryAsync(string slug);
 
         /// <summary>Товар с характеристиками и офферами всех магазинов.</summary>
         Task<Product?> GetProductWithOffersAsync(int id);

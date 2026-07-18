@@ -1,0 +1,66 @@
+@model List<Shop.Domain.Entities.Product>
+@{
+    ViewData["Title"] = "Избранное";
+}
+
+<div class="cabinet-wide">
+    <div class="cabinet-nav">
+        <a asp-controller="Cabinet" asp-action="Index">Профиль</a>
+        <a class="active" asp-controller="Cabinet" asp-action="Favorites">Избранное</a>
+        <a asp-controller="Cabinet" asp-action="ChangePassword">Сменить пароль</a>
+    </div>
+
+    <h1>Избранное</h1>
+
+    @if (TempData["Ok"] != null)
+    {
+        <div class="alert alert-success">@TempData["Ok"]</div>
+    }
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted">В избранном пока ничего нет. Добавляйте товары кнопкой ♡ в каталоге.</p>
+    }
+    else
+    {
+        <div class="fav-list">
+            @foreach (var p in Model)
+            {
+                <div class="fav-item">
+                    <img src="@(string.IsNullOrEmpty(p.ImageUrl) ? "/img/placeholder-phone-1.png" : p.ImageUrl)" alt="@p.Name" />
+                    <div class="fav-main">
+                        <a asp-controller="Catalog" asp-action="Product" asp-route-id="@p.Id" class="fav-name">@p.Name</a>
+                        <div class="fav-brand">@p.Brand</div>
+                        <div class="fav-price">
+                            @if (p.PriceMin.HasValue)
+                            {
+                                <text>от <b>@p.PriceMin.Value.ToString("N0")</b></text>
+                                @if (p.PriceMax.HasValue && p.PriceMax != p.PriceMin) { <text> до <b>@p.PriceMax.Value.ToString("N0")</b></text> }
+                                <text> грн · @p.Offers.Count предл.</text>
+                            }
+                        </div>
+                    </div>
+                    <form asp-controller="Cabinet" asp-action="ToggleFavorite" method="post">
+                        <input type="hidden" name="productId" value="@p.Id" />
+                        <input type="hidden" name="returnUrl" value="@Url.Action("Favorites")" />
+                        <button type="submit" class="btn btn-outline-danger btn-sm">Убрать</button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .cabinet-wide{max-width:820px;margin:0 auto}
+    .cabinet-nav{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+    .cabinet-nav a{padding:8px 14px;border-radius:6px;text-decoration:none;color:var(--link,#334);background:var(--tag-bg,#f0f3f9)}
+    .cabinet-nav a.active{background:var(--accent,#3650a6);color:#fff}
+    .fav-list{display:flex;flex-direction:column;gap:12px}
+    .fav-item{display:flex;align-items:center;gap:16px;background:var(--card-bg,#fff);border:1px solid var(--border,#eee);border-radius:8px;padding:12px}
+    .fav-item img{width:80px;height:80px;object-fit:contain;border-radius:6px}
+    .fav-main{flex:1;min-width:0}
+    .fav-name{font-weight:600;color:var(--link,#2b4b85);text-decoration:none;font-size:17px}
+    .fav-brand{color:#888;font-size:13px}
+    .fav-price{color:#d9534f;margin-top:4px}
+</style>

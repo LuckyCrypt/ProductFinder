@@ -1,0 +1,32 @@
+@model List<Shop.Domain.Entities.Category>
+
+<nav class="catalog-menu">
+    @foreach (var c in Model)
+    {
+        <div class="cm-item">
+            <a asp-controller="Catalog" asp-action="Category" asp-route-slug="@c.Slug">
+                @c.IconOrImage @c.Name
+            </a>
+            @if (c.Children.Any())
+            {
+                <div class="cm-sub">
+                    @foreach (var ch in c.Children.OrderBy(x => x.Name))
+                    {
+                        <a asp-controller="Catalog" asp-action="Category" asp-route-slug="@ch.Slug">@ch.Name</a>
+                    }
+                </div>
+            }
+        </div>
+    }
+</nav>
+
+<style>
+    .catalog-menu{display:flex;gap:6px;flex-wrap:wrap;padding:8px 16px;border-bottom:1px solid var(--border,#eee);background:var(--card-bg,#fff)}
+    .catalog-menu .cm-item{position:relative}
+    .catalog-menu .cm-item > a{display:block;padding:8px 12px;border-radius:6px;color:var(--link,#334);text-decoration:none;font-size:14px;font-weight:500}
+    .catalog-menu .cm-item > a:hover{background:var(--tag-bg,#f0f3f9)}
+    .catalog-menu .cm-sub{display:none;position:absolute;top:100%;left:0;background:var(--card-bg,#fff);border:1px solid var(--border,#eee);border-radius:6px;min-width:180px;box-shadow:0 6px 18px rgba(0,0,0,.08);z-index:20;padding:6px 0}
+    .catalog-menu .cm-item:hover .cm-sub{display:block}
+    .catalog-menu .cm-sub a{display:block;padding:8px 14px;color:var(--link,#334);text-decoration:none;font-size:14px}
+    .catalog-menu .cm-sub a:hover{background:var(--tag-bg,#f0f3f9)}
+</style>

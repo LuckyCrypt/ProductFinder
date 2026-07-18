@@ -28,18 +28,13 @@ namespace Shop.Services
                 .FirstOrDefaultAsync(c => c.Slug == slug);
         }
 
-        public async Task<List<Product>> GetProductsByCategoryAsync(string slug, string? sort = null)
+        public async Task<List<Product>> GetProductsByCategoryAsync(string slug, CatalogFilter? filter = null)
         {
-            var category = await _context.Categories
-                .Include(c => c.Children)
-                .FirstOrDefaultAsync(c => c.Slug == slug);
-
-            if (category is null)
+            var categoryIds = await CategoryWithChildrenIdsAsync(slug);
+            if (categoryIds.Count == 0)
                 return new List<Product>();
 
-            // Товары самой категории и её дочерних (напр. «Компьютеры» → «Ноутбуки»).
-            var categoryIds = new List<int> { category.Id };
-            categoryIds.AddRange(category.Children.Select(c => c.Id));
+            filter ??= new CatalogFilter();
 
             var query = _context.Products
                 .Include(p => p.Offers).ThenInclude(o => o.Store)
@@ -47,13 +42,51 @@ namespace Shop.Services
                 .Include(p => p.Category)
                 .Where(p => categoryIds.Contains(p.CategoryId));
 
-            query = sort switch
+            if (!string.IsNullOrWhiteSpace(filter.Brand))
+                query = query.Where(p => p.Brand == filter.Brand);
+            if (filter.PriceMin.HasValue)
+                query = query.Where(p => p.PriceMin >= filter.PriceMin.Value);
+            if (filter.PriceMax.HasValue)
+                query = query.Where(p => p.PriceMin <= filter.PriceMax.Value);
+
+            query = filter.Sort switch
             {
                 "price" => query.OrderBy(p => p.PriceMin ?? decimal.MaxValue),
+                "price_desc" => query.OrderByDescending(p => p.PriceMin ?? decimal.MinValue),
+                "name" => query.OrderBy(p => p.Name),
                 _ => query.OrderByDescending(p => p.Offers.Count).ThenBy(p => p.Name),
             };
 
             return await query.ToListAsync();
+        }
+
+        public async Task<List<string>> GetBrandsForCategoryAsync(string slug)
+        {
+            var categoryIds = await CategoryWithChildrenIdsAsync(slug);
+            if (categoryIds.Count == 0)
+                return new List<string>();
+
+            return await _context.Products
+                .Where(p => categoryIds.Contains(p.CategoryId) && p.Brand != null && p.Brand != "")
+                .Select(p => p.Brand!)
+                .Distinct()
+                .OrderBy(b => b)
+                .ToListAsync();
+        }
+
+        /// <summary>Id категории по slug плюс id её прямых подкатегорий.</summary>
+        private async Task<List<int>> CategoryWithChildrenIdsAsync(string slug)
+        {
+            var category = await _context.Categories
+                .Include(c => c.Children)
+                .FirstOrDefaultAsync(c => c.Slug == slug);
+
+            if (category is null)
+                return new List<int>();
+
+            var ids = new List<int> { category.Id };
+            ids.AddRange(category.Children.Select(c => c.Id));
+            return ids;
         }
 
         public async Task<Product?> GetProductWithOffersAsync(int id)

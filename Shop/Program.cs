@@ -30,6 +30,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddScoped<ICatalogService, CatalogService>();
+builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 
 var app = builder.Build();
 
