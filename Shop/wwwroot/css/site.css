@@ -1,0 +1,322 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+/*Цвета*/
+.bg-light {
+    background-color: #f8f9fa !important; /*Чуть светлее для фона*/
+}
+
+.btn-success {
+    background-color: #4CAF50; /*Зеленый*/
+    border-color: #4CAF50;
+}
+
+    .btn-success:hover {
+        background-color: #388E3C;
+        border-color: #388E3C;
+    }
+/*Зеленый акцент на заголовки*/
+h2 {
+    color: #2E7D32;
+}
+/*Категории*/
+.category-card {
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+    .category-card:hover {
+        transform: translateY(-5px);
+    }
+
+.category-image-wrapper {
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.category-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+/*Карточки товаров*/
+.product-card {
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.product-price {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+/* --- БАЗОВЫЕ НАСТРОЙКИ --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #fff;
+    color: #333;
+    padding: 20px 0;
+}
+
+/* Контейнер по центру экрана */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    overflow: hidden; /* Обрезаем края, если что-то вылезает */
+}
+
+/* --- ВЕРХНЯЯ НАВИГАЦИЯ --- */
+.top-nav {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    padding-bottom: 20px;
+    white-space: nowrap;
+}
+
+    .top-nav a {
+        text-decoration: none;
+        color: #777;
+        font-size: 14px;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+
+        .top-nav a:hover {
+            color: #000;
+        }
+
+/* --- ГЛАВНАЯ СЕТКА БАННЕРОВ (CSS GRID) --- */
+/* Мы делим пространство на 4 колонки и 2 строки */
+.main-banners {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr; /* 1 колонка, 1 колонка, и 1 широкая (как 2) */
+    grid-template-rows: 180px 180px; /* Высота строк */
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+/* Общие стили для всех карточек */
+.card {
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+    .card:hover {
+        transform: scale(1.02);
+    }
+
+/* 1. Стиральные машины (верх, слева) */
+.card-washers {
+    grid-column: 1;
+    grid-row: 1;
+    background-color: #4a67c9;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Текст справа */
+}
+
+    .card-washers .title {
+        font-size: 18px;
+        font-weight: 600;
+        max-width: 50%;
+        text-align: left;
+    }
+
+/* 2. Наручные часы (низ, слева) */
+.card-watches {
+    grid-column: 1;
+    grid-row: 2;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+    .card-watches .title {
+        font-size: 18px;
+        color: #555;
+        max-width: 50%;
+    }
+
+/* 3. Смартфоны (центр, высокая карточка) */
+.card-smartphones {
+    grid-column: 2;
+    grid-row: 1 / span 2; /* Занимает 2 строки в высоту */
+    background: linear-gradient(135deg, #d32f2f, #f44336);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    .card-smartphones .title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+/* 4. Компьютерная техника (справа, широкая и высокая) */
+.card-computers {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    background-color: #f2f4f7;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Текст вправо */
+}
+
+    .card-computers .title {
+        font-size: 32px;
+        color: #1a498b;
+        font-weight: bold;
+        margin-top: 40px;
+        margin-right: 40px;
+        text-align: right;
+    }
+
+    .card-computers .subtitle {
+        font-size: 16px;
+        color: #555;
+        margin-right: 40px;
+    }
+
+
+/* --- МАЛЕНЬКИЕ БАННЕРЫ СНИЗУ --- */
+.sub-banners {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 равные колонки */
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.sub-card {
+    background-color: #eaf3fa;
+    border-radius: 12px;
+    height: 100px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    cursor: pointer;
+}
+
+    /* Цвета для разных маленьких карточек */
+    .sub-card:nth-child(1) {
+        background-color: #e6ebf0;
+    }
+    /* Видео-регистраторы */
+    .sub-card:nth-child(2) {
+        background-color: #f0f0f0;
+    }
+    /* Wi-Fi */
+    .sub-card:nth-child(3) {
+        background-color: #dbeaf8;
+    }
+    /* Планшеты */
+    .sub-card:nth-child(4) {
+        background-color: #ebebeb;
+    }
+    /* Конструкторы */
+
+    .sub-card .title {
+        font-size: 14px;
+        color: #555;
+        max-width: 60%;
+    }
+
+/* --- ТОЧКИ СЛАЙДЕРА --- */
+.slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 40px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #d1d5db;
+    cursor: pointer;
+}
+
+    .dot.active {
+        background-color: #3b5998;
+    }
+
+/* --- СЕКЦИЯ ПОПУЛЯРНЫЕ МОДЕЛИ --- */
+.section-title {
+    font-size: 28px;
+    color: #555;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.products-row {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 20px;
+}
+
+.product-item {
+    min-width: 150px;
+    height: 150px;
+    background-color: #f8f8f8;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Декоративные круги/заглушки для имитации картинок в карточках */
+.img-placeholder {
+    position: absolute;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+}
