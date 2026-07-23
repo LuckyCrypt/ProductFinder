@@ -48,9 +48,16 @@ namespace Shop.Domain
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
+            builder.Entity<Store>(e =>
+            {
+                e.Property(s => s.Code).HasMaxLength(32);
+                e.HasIndex(s => s.Code);
+            });
+
             builder.Entity<Offer>(e =>
             {
                 e.Property(o => o.Price).HasColumnType("numeric(12,2)");
+                e.Property(o => o.LastStatus).HasMaxLength(32);
                 e.HasOne(o => o.Product)
                     .WithMany(p => p.Offers)
                     .HasForeignKey(o => o.ProductId)

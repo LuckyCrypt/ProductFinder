@@ -4,16 +4,19 @@ using Microsoft.EntityFrameworkCore;
 using Shop.Areas.Admin.Models;
 using Shop.Domain;
 using Shop.Domain.Entities;
+using Shop.Services.Scraping;
 
 namespace Shop.Areas.Admin.Controllers
 {
     public class ProductsController : AdminBaseController
     {
         private readonly DBContext _context;
+        private readonly IScrapeQueue _scrapeQueue;
 
-        public ProductsController(DBContext context)
+        public ProductsController(DBContext context, IScrapeQueue scrapeQueue)
         {
             _context = context;
+            _scrapeQueue = scrapeQueue;
         }
 
         public async Task<IActionResult> Index()
@@ -114,6 +117,18 @@ namespace Shop.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 TempData["Ok"] = "Оффер добавлен";
             }
+            return RedirectToAction(nameof(Edit), new { id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RefreshPrices(int id)
+        {
+            var exists = await _context.Products.AnyAsync(p => p.Id == id);
+            if (!exists) return NotFound();
+
+            await _scrapeQueue.EnqueueAsync(new ScrapeJob(id));
+            TempData["Ok"] = "Сбор цен запущен в фоне — обновите страницу через минуту, чтобы увидеть результат";
             return RedirectToAction(nameof(Edit), new { id });
         }
 

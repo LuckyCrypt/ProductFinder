@@ -24,7 +24,43 @@ namespace Shop.Data
             await context.Database.MigrateAsync();
 
             await SeedRolesAndAdminAsync(sp);
+            await SeedMarketplaceStoresAsync(context);
             await SeedCatalogAsync(context);
+        }
+
+        /// <summary>
+        /// Идемпотентно заводит магазины-маркетплейсы с кодом адаптера парсера.
+        /// Выполняется всегда (в отличие от каталога), чтобы код появился и на уже
+        /// наполненной БД.
+        /// </summary>
+        private static async Task SeedMarketplaceStoresAsync(DBContext context)
+        {
+            var marketplaces = new[]
+            {
+                (Code: "wb",     Name: "Wildberries",     Site: "https://www.wildberries.ru", Logo: "🟣"),
+                (Code: "ozon",   Name: "Ozon",            Site: "https://www.ozon.ru",        Logo: "🔵"),
+                (Code: "yandex", Name: "Яндекс.Маркет",   Site: "https://market.yandex.ru",   Logo: "🟡"),
+            };
+
+            var changed = false;
+            foreach (var m in marketplaces)
+            {
+                var store = await context.Stores.FirstOrDefaultAsync(s => s.Code == m.Code);
+                if (store is null)
+                {
+                    context.Stores.Add(new Store
+                    {
+                        Name = m.Name,
+                        Code = m.Code,
+                        SiteUrl = m.Site,
+                        LogoUrl = m.Logo,
+                    });
+                    changed = true;
+                }
+            }
+
+            if (changed)
+                await context.SaveChangesAsync();
         }
 
         private static async Task SeedRolesAndAdminAsync(IServiceProvider sp)

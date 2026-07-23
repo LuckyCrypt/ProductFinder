@@ -8,28 +8,40 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] — Админ · LuckyCatalog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/widlanex.css" />
     <style>
-        body { margin: 0; background: #f4f6fa; font-family: -apple-system, "Segoe UI", Roboto, sans-serif; }
+        /* WidLanex admin palette */
+        :root { --wlx-accent: #379100; --wlx-accent-grad: linear-gradient(135deg,#205300 0%,#379100 55%,#44b300 100%); }
+        body { margin: 0; background: #f5f6f7; font-family: 'Manrope', -apple-system, "Segoe UI", Roboto, sans-serif; color: #191919; }
         .admin-wrap { display: flex; min-height: 100vh; }
-        .admin-side { width: 230px; background: #1f2937; color: #cbd5e1; flex-shrink: 0; }
-        .admin-side .brand { padding: 18px 20px; font-size: 18px; font-weight: 700; color: #fff; border-bottom: 1px solid #374151; }
-        .admin-side a { display: block; padding: 12px 20px; color: #cbd5e1; text-decoration: none; }
-        .admin-side a:hover { background: #374151; color: #fff; }
-        .admin-side a.active { background: #2563eb; color: #fff; }
+        .admin-side { width: 230px; background: #1e2227; color: #b8bcc2; flex-shrink: 0; }
+        .admin-side .brand { padding: 20px; font-size: 18px; font-weight: 800; color: #fff; border-bottom: 1px solid #2a2f35; }
+        .admin-side a { display: block; padding: 12px 20px; color: #b8bcc2; text-decoration: none; font-weight: 600; border-left: 3px solid transparent; transition: all .2s ease; }
+        .admin-side a:hover { background: #262c32; color: #fff; }
+        .admin-side a.active { background: #262c32; color: #fff; border-left-color: #44b300; }
         .admin-main { flex: 1; padding: 24px 32px; min-width: 0; }
-        .admin-main h1 { font-size: 24px; margin: 0 0 20px; }
-        table.grid { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; }
-        table.grid th, table.grid td { padding: 10px 12px; border-bottom: 1px solid #eef1f5; text-align: left; }
-        table.grid th { background: #f8fafc; font-size: 13px; color: #64748b; }
+        .admin-main h1 { font-size: 24px; font-weight: 800; margin: 0 0 20px; }
+        table.grid { width: 100%; border-collapse: collapse; background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+        table.grid th, table.grid td { padding: 12px 14px; border-bottom: 1px solid #ececec; text-align: left; }
+        table.grid th { background: #f0f2f4; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: #555; font-weight: 700; }
+        table.grid tbody tr:hover { background: #f7f8f9; }
         .btn-sm { padding: 4px 10px; font-size: 13px; }
-        .card-form { background: #fff; padding: 20px; border-radius: 8px; max-width: 720px; }
+        .btn-primary { background: var(--wlx-accent-grad); border: none; }
+        .btn-primary:hover, .btn-primary:focus { filter: brightness(1.06); background: var(--wlx-accent-grad); border: none; }
+        .btn-outline-primary { color: var(--wlx-accent); border-color: var(--wlx-accent); }
+        .btn-outline-primary:hover { background: var(--wlx-accent); border-color: var(--wlx-accent); }
+        .card-form { background: #fff; padding: 24px; border-radius: 14px; max-width: 720px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
         .stat-row { display: flex; gap: 16px; flex-wrap: wrap; }
-        .stat { background: #fff; border-radius: 8px; padding: 18px 22px; min-width: 150px; }
-        .stat .n { font-size: 28px; font-weight: 700; color: #2563eb; }
-        .stat .l { color: #64748b; font-size: 14px; }
+        .stat { background: #fff; border-radius: 14px; padding: 20px 24px; min-width: 150px; box-shadow: 0 2px 10px rgba(0,0,0,.06); border: 1px solid #ececec; }
+        .stat .n { font-size: 30px; font-weight: 800; color: var(--wlx-accent); }
+        .stat .l { color: #555; font-size: 14px; }
         .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+        .admin-main a { color: var(--wlx-accent); }
     </style>
 </head>
 <body>

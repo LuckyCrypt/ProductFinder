@@ -21,5 +21,11 @@ namespace Shop.Domain.Entities
 
         /// <summary>Когда цена последний раз обновлялась (парсером или вручную).</summary>
         public DateTime LastCheckedAt { get; set; } = DateTime.UtcNow;
+
+        /// <summary>Итог последнего сбора парсером: Ok | Captcha | Blocked | Error | NotFound.</summary>
+        public string? LastStatus { get; set; }
+
+        /// <summary>Текст ошибки последнего сбора (если был), для диагностики в админке.</summary>
+        public string? LastError { get; set; }
     }
 }

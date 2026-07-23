@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ParsElements.Scraping;
 using Shop.Data;
 using Shop.Domain;
 using Shop.Domain.Entities;
 using Shop.Services;
+using Shop.Services.Scraping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +33,17 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddScoped<ICatalogService, CatalogService>();
 builder.Services.AddScoped<IFavoriteService, FavoriteService>();
+
+// --- Парсер цен маркетплейсов ---
+// Wildberries — через HttpClient (публичный JSON API).
+builder.Services.AddHttpClient<IMarketplaceParser, WildberriesParser>();
+// Ozon / Яндекс.Маркет — через Playwright (headful для обхода части анти-бот защиты).
+builder.Services.AddSingleton<IMarketplaceParser>(_ => new OzonParser(headless: false));
+builder.Services.AddSingleton<IMarketplaceParser>(_ => new YandexParser(headless: false));
+
+builder.Services.AddScoped<PriceCollectorService>();
+builder.Services.AddSingleton<IScrapeQueue, ScrapeQueue>();
+builder.Services.AddHostedService<ScrapeBackgroundService>();
 
 var app = builder.Build();
 

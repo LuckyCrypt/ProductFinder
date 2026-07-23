@@ -39,9 +39,12 @@
 </div>
 
 <style>
-    .cabinet{max-width:640px;margin:0 auto}
-    .cabinet-nav{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-    .cabinet-nav a{padding:8px 14px;border-radius:6px;text-decoration:none;color:var(--link,#334);background:var(--tag-bg,#f0f3f9)}
-    .cabinet-nav a.active{background:var(--accent,#3650a6);color:#fff}
-    .cabinet-card{background:var(--card-bg,#fff);border:1px solid var(--border,#eee);border-radius:8px;padding:20px}
+    .cabinet{max-width:640px;margin:0 auto;padding:10px 0}
+    .cabinet h1{font-size:26px;font-weight:800;margin-bottom:16px;color:var(--text-primary)}
+    .cabinet-nav{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+    .cabinet-nav a{padding:9px 16px;border-radius:10px;text-decoration:none;font-weight:700;color:var(--text-secondary);background:var(--tag-bg)}
+    .cabinet-nav a:hover{color:var(--accent)}
+    .cabinet-nav a.active{background:var(--accent-grad);color:#fff}
+    .cabinet-card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:var(--radius,14px);padding:24px;box-shadow:var(--shadow)}
+    .cabinet-card .form-control{border-radius:10px}
 </style>

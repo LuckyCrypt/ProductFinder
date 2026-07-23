@@ -75,20 +75,28 @@
 </div>
 
 <style>
-    .product-page{padding:20px;max-width:1000px}
-    .back-link{color:var(--link,#2b4b85);text-decoration:none;font-size:14px}
-    .product-top{display:flex;gap:24px;margin-top:16px;flex-wrap:wrap}
-    .product-image{width:280px;flex-shrink:0}
-    .product-image img{width:100%;border-radius:10px;border:1px solid var(--border,#eee)}
-    .product-info{flex:1;min-width:280px}
-    .product-info h1{margin:0 0 4px;font-size:26px}
-    .product-info .brand{color:#888;margin:0 0 12px}
-    .price-range{color:#d9534f;font-weight:600;font-size:22px;margin-bottom:16px}
-    .offers-table,.spec-table{width:100%;border-collapse:collapse;margin-top:8px}
-    .offers-table th,.offers-table td,.spec-table td{padding:8px;border-bottom:1px solid var(--border,#eee);text-align:left}
-    .offers-table .price{font-weight:600;white-space:nowrap}
-    .go-btn{display:inline-block;background:var(--accent,#3650a6);color:#fff;padding:5px 12px;border-radius:6px;text-decoration:none;font-size:13px}
-    .spec-table .spec-group td{font-weight:600;background:var(--tag-bg,#f3f6fb)}
-    .spec-table .spec-name{color:#777;width:40%}
-    h3{margin-top:24px}
+    .product-page{padding:20px 0;max-width:1000px;margin:0 auto}
+    .back-link{color:var(--text-secondary);text-decoration:none;font-size:14px;font-weight:600}
+    .back-link:hover{color:var(--accent)}
+    .product-top{display:flex;gap:32px;margin-top:20px;flex-wrap:wrap}
+    .product-image{width:340px;flex-shrink:0;background:linear-gradient(180deg,var(--card-grad-b),var(--card-grad-a));border:1px solid var(--border-color);border-radius:var(--radius,14px);padding:24px;display:flex;align-items:center;justify-content:center}
+    .product-image img{width:100%;border-radius:8px;object-fit:contain}
+    .product-info{flex:1;min-width:300px}
+    .product-info h1{margin:0 0 6px;font-size:28px;font-weight:800;letter-spacing:-.5px;color:var(--text-primary)}
+    .product-info .brand{color:var(--text-muted);margin:0 0 16px;font-weight:600}
+    .price-range{color:var(--text-primary);font-weight:800;font-size:26px;margin-bottom:18px}
+    .fav-btn{background:none;border:1px solid var(--border-color);border-radius:20px;padding:8px 18px;font-size:14px;font-weight:600;cursor:pointer;color:var(--text-secondary);transition:all .2s ease}
+    .fav-btn.on{color:#fff;background:var(--accent);border-color:var(--accent)}
+    .fav-btn:hover{border-color:var(--accent);color:var(--accent)}
+    .fav-btn.on:hover{color:#fff}
+    .product-info h3,.product-page > h3{margin-top:28px;margin-bottom:12px;font-size:18px;font-weight:800;color:var(--text-primary);padding-bottom:8px;border-bottom:2px solid var(--border-color)}
+    .offers-table,.spec-table{width:100%;border-collapse:collapse;margin-top:8px;background:var(--card-bg);border-radius:var(--radius,14px);overflow:hidden}
+    .offers-table thead th{background:var(--tag-bg);color:var(--text-secondary);font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+    .offers-table th,.offers-table td,.spec-table td{padding:12px;border-bottom:1px solid var(--border-color);text-align:left;color:var(--text-primary)}
+    .offers-table .price{font-weight:800;white-space:nowrap}
+    .go-btn{display:inline-block;background:var(--accent-grad);color:#fff;padding:8px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;box-shadow:0 4px 12px rgba(55,145,0,.25);transition:filter .2s ease}
+    .go-btn:hover{filter:brightness(1.06);color:#fff}
+    .spec-table .spec-group td{font-weight:800;background:var(--tag-bg);color:var(--text-primary);text-transform:uppercase;font-size:12px;letter-spacing:.5px}
+    .spec-table .spec-name{color:var(--text-secondary);width:40%}
+    @@media (max-width:768px){.product-image{width:100%}}
 </style>

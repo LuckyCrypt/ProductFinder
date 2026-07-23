@@ -56,20 +56,48 @@
     <!-- Офферы и характеристики -->
     <div style="flex:1; min-width:340px; display:flex; flex-direction:column; gap:24px;">
         <div class="card-form">
-            <h5>Офферы магазинов
-                <span class="text-muted" style="font-size:14px;font-weight:400">
-                    (диапазон: @(Model.Product.PriceMin?.ToString("N0") ?? "—")@(Model.Product.PriceMax.HasValue && Model.Product.PriceMax != Model.Product.PriceMin ? " … " + Model.Product.PriceMax.Value.ToString("N0") : "") грн)
-                </span>
-            </h5>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+                <h5 style="margin:0">Офферы магазинов
+                    <span class="text-muted" style="font-size:14px;font-weight:400">
+                        (диапазон: @(Model.Product.PriceMin?.ToString("N0") ?? "—")@(Model.Product.PriceMax.HasValue && Model.Product.PriceMax != Model.Product.PriceMin ? " … " + Model.Product.PriceMax.Value.ToString("N0") : "") ₽)
+                    </span>
+                </h5>
+                <form asp-action="RefreshPrices" asp-route-id="@Model.Product.Id" method="post" style="margin:0">
+                    <button type="submit" class="btn btn-primary btn-sm">⟳ Обновить цены</button>
+                </form>
+            </div>
+            <p class="text-muted" style="font-size:12px;margin:6px 0 12px">
+                Цены обновляются парсером для офферов с маркетплейсов (Wildberries / Ozon / Яндекс.Маркет),
+                у которых указана ссылка на карточку. Сбор идёт в фоне.
+            </p>
             <table class="grid" style="margin-bottom:14px">
-                <thead><tr><th>Магазин</th><th>Цена</th><th>Наличие</th><th></th></tr></thead>
+                <thead><tr><th>Магазин</th><th>Цена</th><th>Наличие</th><th>Статус</th><th></th></tr></thead>
                 <tbody>
                 @foreach (var o in Model.Product.Offers.OrderBy(o => o.Price))
                 {
                     <tr>
-                        <td>@o.Store?.Name</td>
+                        <td>
+                            @o.Store?.Name
+                            @if (!string.IsNullOrEmpty(o.Store?.Code) && !string.IsNullOrEmpty(o.ProductUrl))
+                            {
+                                <a href="@o.ProductUrl" target="_blank" rel="noopener" title="Ссылка на карточку" style="text-decoration:none">🔗</a>
+                            }
+                        </td>
                         <td>@o.Price.ToString("N0")</td>
                         <td>@(o.InStock ? "да" : "нет")</td>
+                        <td>
+                            @{
+                                var st = string.IsNullOrEmpty(o.LastStatus) ? "—" : o.LastStatus;
+                                var stColor = st switch
+                                {
+                                    "Ok" => "#379100",
+                                    "Captcha" or "Blocked" => "#ee7a00",
+                                    "Error" or "NotFound" => "#ee0000",
+                                    _ => "#979797"
+                                };
+                            }
+                            <span style="font-weight:600;color:@stColor" title="@o.LastError">@st</span>
+                        </td>
                         <td>
                             <form asp-action="DeleteOffer" asp-route-id="@Model.Product.Id" method="post" style="display:inline">
                                 <input type="hidden" name="offerId" value="@o.Id" />
@@ -80,7 +108,7 @@
                 }
                 @if (!Model.Product.Offers.Any())
                 {
-                    <tr><td colspan="4" class="text-muted">Офферов пока нет</td></tr>
+                    <tr><td colspan="5" class="text-muted">Офферов пока нет</td></tr>
                 }
                 </tbody>
             </table>
@@ -93,7 +121,7 @@
                         <select name="StoreId" asp-items="stores" class="form-select form-select-sm"></select>
                     </div>
                     <div class="col">
-                        <label class="form-label">Цена, грн</label>
+                        <label class="form-label">Цена, ₽</label>
                         <input name="Price" type="number" step="1" class="form-control form-control-sm" />
                     </div>
                     <div class="col-12">

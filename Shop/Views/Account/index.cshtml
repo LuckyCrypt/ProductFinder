@@ -10,9 +10,25 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Авторизация - LuckyCatalog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/widlanex.css" asp-append-version="true" />
+    <style>
+        /* Автономная страница входа — нейтрализуем стили фикс-шапки основного макета */
+        body { padding-top: 0 !important; background: var(--bg-secondary); }
+        .card { border: 1px solid var(--border-color); border-radius: var(--radius); box-shadow: var(--shadow-deep); background: var(--card-bg); }
+        .card-header { background: transparent; border-bottom: 1px solid var(--border-color); }
+        .card-header .text-primary { color: var(--accent) !important; }
+        .nav-pills .nav-link { color: var(--text-secondary); font-weight: 700; border-radius: 10px; }
+        .nav-pills .nav-link.active { background: var(--accent-grad); color: #fff; }
+        main > footer.footer { background: transparent; color: var(--text-muted); margin-top: 12px; padding: 0; }
+        main > footer.footer a { color: var(--text-muted); }
+    </style>
 </head>
 <body>
     <div class="container-fluid d-flex align-items-center justify-content-center flex-column" style="min-height: 100vh;">

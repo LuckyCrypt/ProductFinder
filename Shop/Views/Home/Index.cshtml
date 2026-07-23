@@ -1,291 +1,208 @@
-﻿@model IEnumerable<Shop.Domain.Entities.Product>
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-            /* --- БАЗА ДЛЯ НАШЕГО БЛОКА --- */
-            .marketplace-wrapper {
-                width: 100%; /* Занимает всю ширину, которую дает _Layout */
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            }
+@model IEnumerable<Shop.Domain.Entities.Product>
 
-                .marketplace-wrapper * {
-                    box-sizing: border-box; /* Важно, чтобы паддинги не ломали ширину */
-                }
+<div class="marketplace-wrapper">
 
-                /* --- ВЕРХНЯЯ НАВИГАЦИЯ --- */
-                .marketplace-wrapper .top-nav {
-                    display: flex;
-                    gap: 24px;
-                    overflow-x: auto;
-                    padding-bottom: 20px;
-                    margin-bottom: 20px;
-                    white-space: nowrap;
-                }
-
-                    .marketplace-wrapper .top-nav a {
-                        text-decoration: none;
-                        color: #777;
-                        font-size: 14px;
-                        font-weight: 500;
-                        transition: color 0.2s;
-                    }
-
-                        .marketplace-wrapper .top-nav a:hover {
-                            color: #000;
-                        }
-
-                /* --- ГЛАВНАЯ СЕТКА БАННЕРОВ --- */
-                .marketplace-wrapper .main-banners {
-                    display: grid;
-                    /* 1fr - значит фракция (часть). Сетка гибкая и сожмется под твой _Layout */
-                    grid-template-columns: 1fr 1fr 2fr;
-                    grid-template-rows: 180px 180px;
-                    gap: 16px;
-                    margin-bottom: 16px;
-                }
-
-                .marketplace-wrapper .card {
-                    border-radius: 16px;
-                    padding: 20px;
-                    position: relative;
-                    overflow: hidden;
-                    cursor: pointer;
-                    transition: transform 0.2s;
-                }
-
-                    .marketplace-wrapper .card:hover {
-                        transform: scale(1.02);
-                    }
-
-                .marketplace-wrapper .card-washers {
-                    grid-column: 1;
-                    grid-row: 1;
-                    background-color: #4a67c9;
-                    color: white;
-                    display: flex;
-                    align-items: center;
-                    justify-content: flex-end;
-                }
-
-                    .marketplace-wrapper .card-washers .title {
-                        font-size: 18px;
-                        font-weight: 600;
-                        max-width: 50%;
-                    }
-
-                .marketplace-wrapper .card-watches {
-                    grid-column: 1;
-                    grid-row: 2;
-                    background-color: #f0f0f0;
-                    display: flex;
-                    align-items: center;
-                    justify-content: flex-end;
-                }
-
-                    .marketplace-wrapper .card-watches .title {
-                        font-size: 18px;
-                        color: #555;
-                        max-width: 50%;
-                    }
-
-                .marketplace-wrapper .card-smartphones {
-                    grid-column: 2;
-                    grid-row: 1 / span 2;
-                    background: linear-gradient(135deg, #d32f2f, #f44336);
-                    color: white;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                }
-
-                    .marketplace-wrapper .card-smartphones .title {
-                        font-size: 24px;
-                        font-weight: bold;
-                        margin-top: 10px;
-                    }
-
-                .marketplace-wrapper .card-computers {
-                    grid-column: 3;
-                    grid-row: 1 / span 2;
-                    background-color: #f2f4f7;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: flex-end;
-                }
-
-                    .marketplace-wrapper .card-computers .title {
-                        font-size: clamp(20px, 2.5vw, 32px); /* Защита текста от вылезания на узких экранах */
-                        color: #1a498b;
-                        font-weight: bold;
-                        margin-top: 40px;
-                        margin-right: 40px;
-                        text-align: right;
-                        line-height: 1.1;
-                    }
-
-                    .marketplace-wrapper .card-computers .subtitle {
-                        font-size: 16px;
-                        color: #555;
-                        margin-right: 40px;
-                    }
-
-                /* --- МАЛЕНЬКИЕ БАННЕРЫ --- */
-                .marketplace-wrapper .sub-banners {
-                    display: grid;
-                    grid-template-columns: repeat(4, 1fr);
-                    gap: 16px;
-                    margin-bottom: 24px;
-                }
-
-                .marketplace-wrapper .sub-card {
-                    background-color: #eaf3fa;
-                    border-radius: 12px;
-                    height: 100px;
-                    padding: 16px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: flex-end;
-                }
-
-                    .marketplace-wrapper .sub-card:nth-child(1) {
-                        background-color: #e6ebf0;
-                    }
-
-                    .marketplace-wrapper .sub-card:nth-child(2) {
-                        background-color: #f0f0f0;
-                    }
-
-                    .marketplace-wrapper .sub-card:nth-child(3) {
-                        background-color: #dbeaf8;
-                    }
-
-                    .marketplace-wrapper .sub-card:nth-child(4) {
-                        background-color: #ebebeb;
-                    }
-
-                    .marketplace-wrapper .sub-card .title {
-                        font-size: 14px;
-                        color: #555;
-                        max-width: 60%;
-                        line-height: 1.2;
-                    }
-
-                /* --- СЛАЙДЕР И ТОВАРЫ --- */
-                .marketplace-wrapper .slider-dots {
-                    display: flex;
-                    justify-content: center;
-                    gap: 8px;
-                    margin-bottom: 40px;
-                }
-
-                .marketplace-wrapper .dot {
-                    width: 10px;
-                    height: 10px;
-                    border-radius: 50%;
-                    background-color: #d1d5db;
-                }
-
-                    .marketplace-wrapper .dot.active {
-                        background-color: #3b5998;
-                    }
-
-                .marketplace-wrapper .section-title {
-                    font-size: 28px;
-                    color: #555;
-                    margin-bottom: 20px;
-                    font-weight: 600;
-                }
-
-                .marketplace-wrapper .products-row {
-                    display: flex;
-                    gap: 20px;
-                    overflow-x: auto;
-                    padding-bottom: 20px;
-                }
-
-                .marketplace-wrapper .product-item {
-                    min-width: 150px;
-                    height: 150px;
-                    background-color: #f8f8f8;
-                    border-radius: 12px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border: 1px solid #eee;
-                }
-
-                .marketplace-wrapper .img-placeholder {
-                    position: absolute;
-                    background: rgba(255,255,255,0.2);
-                    border-radius: 50%;
-                }
-    </style>
-</head>
-<body>
-    <div class="marketplace-wrapper">
-        <!-- Главные баннеры (Сетка) -->
-        <div class="main-banners">
-            <a href='@Url.Action("Appliances", "Catalog")' class="card card-washers" style="display:block; text-decoration:none; color:inherit;">
-                <div class="img-placeholder" style="width: 100px; height: 100px; left: -20px;"></div>
-                <div class="title">Стиральные<br>машины</div>
-            </a>
-            <a href='@Url.Action("Gadgets", "Catalog")' class="card card-watches" style="display:block; text-decoration:none; color:inherit;">
-                <div class="img-placeholder" style="width: 80px; height: 80px; left: 10px; background: #ccc;"></div>
-                <div class="title">Наручные<br>часы</div>
-            </a>
-            <a href='@Url.Action("Phones", "Catalog")' class="card card-smartphones" style="display:block; text-decoration:none; color:inherit;">
-                <div class="title">Смартфоны</div>
-                <div class="img-placeholder" style="width: 180px; height: 180px; bottom: -40px; background: rgba(0,0,0,0.1);"></div>
-            </a>
-            <a href='@Url.Action("Computers", "Catalog")' class="card card-computers" style="display:block; text-decoration:none; color:inherit;">
-                <div class="subtitle">Компьютерная</div>
-                <div class="title">техника</div>
-                <div class="img-placeholder" style="width: 200px; height: 150px; left: 20px; bottom: 20px; background: #ddd; border-radius: 10px;"></div>
-            </a>
+    <!-- ГЕРОЙ-БАННЕР -->
+    <section class="mp-hero">
+        <button class="mp-hero__arrow mp-hero__arrow--left" type="button" aria-label="Назад">‹</button>
+        <div class="mp-hero__content">
+            <span class="mp-hero__eyebrow">Добро пожаловать в</span>
+            <h1 class="mp-hero__title">LUCKYCATALOG</h1>
+            <p class="mp-hero__subtitle">Техника без компромиссов — для тех, кто выбирает лучшее</p>
         </div>
-
-        <!-- Нижний ряд маленьких баннеров -->
-        <div class="sub-banners">
-            <div class="sub-card"><div class="title">Видео-<br>регистраторы</div></div>
-            <div class="sub-card"><div class="title">Wi-Fi доступ<br>по всему дому</div></div>
-            <div class="sub-card"><div class="title">Планшеты</div></div>
-            <div class="sub-card"><div class="title">Конструкторы<br>для всех возрастов</div></div>
+        <button class="mp-hero__arrow mp-hero__arrow--right" type="button" aria-label="Вперёд">›</button>
+        <div class="mp-hero__dots">
+            <span class="mp-dot active"></span>
+            <span class="mp-dot"></span>
+            <span class="mp-dot"></span>
         </div>
+    </section>
 
-        <!-- Точки переключения -->
-        <div class="slider-dots">
-            <div class="dot active"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-        </div>
+    <!-- РЯД КАТЕГОРИЙ -->
+    <nav class="wlx-cats mp-cats">
+        <a class="wlx-cat" href='@Url.Action("Appliances", "Catalog")'>
+            <span class="wlx-cat__icon">🧺</span>
+            <span class="wlx-cat__label">Стиральные машины</span>
+        </a>
+        <a class="wlx-cat" href='@Url.Action("Gadgets", "Catalog")'>
+            <span class="wlx-cat__icon">⌚</span>
+            <span class="wlx-cat__label">Наручные часы</span>
+        </a>
+        <a class="wlx-cat" href='@Url.Action("Phones", "Catalog")'>
+            <span class="wlx-cat__icon">📱</span>
+            <span class="wlx-cat__label">Смартфоны</span>
+        </a>
+        <a class="wlx-cat" href='@Url.Action("Computers", "Catalog")'>
+            <span class="wlx-cat__icon">💻</span>
+            <span class="wlx-cat__label">Компьютерная техника</span>
+        </a>
+    </nav>
 
-        <!-- Популярные модели -->
-        <h2 class="section-title">Популярные модели</h2>
-        <div class="products-row">
-            @if (Model != null && Model.Any())
+    <!-- ДОПОЛНИТЕЛЬНЫЕ БАННЕРЫ -->
+    <div class="mp-sub">
+        <div class="mp-sub__card"><span class="mp-sub__icon">🎥</span><span>Видео-регистраторы</span></div>
+        <div class="mp-sub__card"><span class="mp-sub__icon">📶</span><span>Wi-Fi доступ по всему дому</span></div>
+        <div class="mp-sub__card"><span class="mp-sub__icon">📲</span><span>Планшеты</span></div>
+        <div class="mp-sub__card"><span class="mp-sub__icon">🧩</span><span>Конструкторы для всех возрастов</span></div>
+    </div>
+
+    <!-- ПОПУЛЯРНЫЕ МОДЕЛИ -->
+    <h2 class="wlx-heading mp-section-title">Популярные модели</h2>
+    <div class="wlx-grid">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var p in Model)
             {
-                foreach (var p in Model)
-                {
-                    <a class="product-item" style="flex-direction:column;text-align:center;text-decoration:none;color:inherit;padding:12px;gap:6px;min-width:170px;height:auto"
-                       href='@Url.Action("Product", "Catalog", new { id = p.Id })'>
-                        <div style="font-weight:600;font-size:14px;line-height:1.2">@p.Name</div>
+                var hasSpread = p.PriceMax.HasValue && p.PriceMin.HasValue && p.PriceMax.Value > p.PriceMin.Value;
+                <a class="wlx-card" href='@Url.Action("Product", "Catalog", new { id = p.Id })'>
+                    <div class="wlx-card__badges">
+                        @if (p.Offers != null && p.Offers.Count > 2)
+                        {
+                            <span class="wlx-badge wlx-badge--hit">Хит</span>
+                        }
+                        @if (hasSpread)
+                        {
+                            <span class="wlx-badge wlx-badge--sale">Скидка</span>
+                        }
+                    </div>
+                    <div class="wlx-card__media">
+                        <img src="@(string.IsNullOrEmpty(p.ImageUrl) ? "/img/placeholder-phone-1.png" : p.ImageUrl)" alt="@p.Name">
+                    </div>
+                    <div class="wlx-card__body">
+                        <div class="wlx-card__title">@p.Name</div>
                         @if (p.PriceMin.HasValue)
                         {
-                            <div style="color:#d9534f;font-weight:600">от @p.PriceMin.Value.ToString("N0") грн</div>
+                            <div>
+                                <span class="wlx-price">от @p.PriceMin.Value.ToString("N0") ₽</span>
+                                @if (hasSpread)
+                                {
+                                    <span class="wlx-price--old">@p.PriceMax!.Value.ToString("N0") ₽</span>
+                                }
+                            </div>
                         }
-                        <div style="font-size:12px;color:#888">@p.Offers.Count предл.</div>
-                    </a>
-                }
+                        <div class="mp-card__offers">@(p.Offers?.Count ?? 0) предл.</div>
+                    </div>
+                </a>
             }
-            else
-            {
-                <div class="product-item">Нет данных</div>
-            }
-        </div>
+        }
+        else
+        {
+            <div class="wlx-panel">Нет данных</div>
+        }
     </div>
-</body>
-</html>
+</div>
+
+<style>
+    .marketplace-wrapper { width: 100%; }
+    .marketplace-wrapper * { box-sizing: border-box; }
+
+    /* Герой */
+    .mp-hero {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 320px;
+        padding: 40px 70px;
+        margin-bottom: 8px;
+        border-radius: 20px;
+        text-align: center;
+        color: #fff;
+        background: radial-gradient(120% 140% at 50% 0%, #24303a 0%, var(--bg-accent, #1e2227) 55%, #0f1316 100%);
+        overflow: hidden;
+    }
+
+    .mp-hero__content { position: relative; z-index: 2; }
+
+    .mp-hero__eyebrow {
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #fff;
+        background: var(--accent-grad, linear-gradient(135deg,#205300,#379100 55%,#44b300));
+        padding: 8px 22px;
+        border-radius: 8px;
+        margin-bottom: 18px;
+    }
+
+    .mp-hero__title {
+        font-size: clamp(38px, 6vw, 72px);
+        font-weight: 800;
+        letter-spacing: 2px;
+        line-height: 1;
+        margin: 0 0 16px;
+    }
+
+    .mp-hero__subtitle { font-size: 16px; color: #c8ccd0; margin: 0; }
+
+    .mp-hero__arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 2;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(255,255,255,0.08);
+        color: #fff;
+        font-size: 24px;
+        line-height: 1;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+        .mp-hero__arrow:hover { background: rgba(255,255,255,0.18); }
+        .mp-hero__arrow--left { left: 18px; }
+        .mp-hero__arrow--right { right: 18px; }
+
+    .mp-hero__dots {
+        position: absolute;
+        bottom: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        z-index: 2;
+    }
+    .mp-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+    .mp-dot.active { background: var(--accent-2, #44b300); width: 22px; border-radius: 4px; }
+
+    /* Ряд категорий */
+    .mp-cats {
+        border-top: 1px solid var(--border-color, #ececec);
+        border-bottom: 1px solid var(--border-color, #ececec);
+        margin-bottom: 28px;
+    }
+
+    /* Доп. баннеры */
+    .mp-sub {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 40px;
+    }
+    .mp-sub__card {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 92px;
+        padding: 18px 20px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, var(--card-grad-b, #fafafa), var(--card-grad-a, #f5f5f5));
+        border: 1px solid var(--border-color, #ececec);
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-secondary, #555);
+    }
+    .mp-sub__icon { font-size: 26px; }
+
+    .mp-section-title { margin-bottom: 20px; }
+    .mp-card__offers { font-size: 12px; color: var(--text-muted, #979797); }
+
+    @@media (max-width: 768px) {
+        .mp-hero { min-height: 220px; padding: 30px 50px; }
+        .mp-sub { grid-template-columns: repeat(2, 1fr); }
+    }
+</style>

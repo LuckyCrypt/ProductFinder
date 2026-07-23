@@ -11,6 +11,12 @@ namespace Shop.Domain.Entities
 
         public string? LogoUrl { get; set; }
 
+        /// <summary>
+        /// Ключ адаптера парсера маркетплейса: "wb" | "ozon" | "yandex".
+        /// null — обычный магазин, цены которого парсер не собирает.
+        /// </summary>
+        public string? Code { get; set; }
+
         public ICollection<Offer> Offers { get; set; } = new List<Offer>();
     }
 }

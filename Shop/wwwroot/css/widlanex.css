@@ -1,0 +1,433 @@
+/* ============================================================
+   WidLanex — библиотека компонентов (кнопки, бейджи, карточки,
+   формы, таблицы, секции). Подключается ПОСЛЕДНИМ, чтобы
+   переопределять Bootstrap и легаси-стили.
+   Токены берутся из Style.css (var(--accent) и т.д.).
+   ============================================================ */
+
+/* ---------- Контейнер / секции / заголовки ---------- */
+.wlx-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.wlx-section {
+    padding: 40px 0;
+}
+
+.wlx-section--dark {
+    background: var(--bg-accent);
+    color: var(--text-contrast);
+    border-radius: 20px;
+}
+
+.wlx-heading {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+}
+
+.wlx-eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-contrast);
+    background: var(--accent-grad);
+    padding: 6px 16px;
+    border-radius: 6px;
+}
+
+/* ---------- Кнопки ---------- */
+.wlx-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+    font-weight: 700;
+    text-decoration: none;
+    text-align: center;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* Размеры */
+.wlx-btn--xxl { padding: 18px 34px; font-size: 16px; border-radius: 12px; }
+.wlx-btn--m   { padding: 12px 22px; font-size: 14px; }
+.wlx-btn--s   { padding: 8px 16px;  font-size: 13px; border-radius: 8px; }
+.wlx-btn--block { display: flex; width: 100%; }
+
+/* Варианты */
+.wlx-btn--primary {
+    background: var(--accent-grad);
+    color: var(--text-contrast);
+    box-shadow: 0 4px 12px rgba(55, 145, 0, 0.25);
+}
+
+    .wlx-btn--primary:hover {
+        filter: brightness(1.06);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(55, 145, 0, 0.35);
+        color: var(--text-contrast);
+    }
+
+.wlx-btn--secondary {
+    background: transparent;
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+    .wlx-btn--secondary:hover {
+        background: rgba(55, 145, 0, 0.08);
+        color: var(--accent);
+    }
+
+.wlx-btn--dark {
+    background: var(--bg-accent);
+    color: var(--text-contrast);
+}
+
+    .wlx-btn--dark:hover {
+        filter: brightness(1.15);
+        color: var(--text-contrast);
+    }
+
+.wlx-btn:disabled,
+.wlx-btn--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ---------- Бейджи ---------- */
+.wlx-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 6px;
+    line-height: 1;
+}
+
+.wlx-badge--hit {
+    background: var(--bg-accent);
+    color: #fff;
+}
+
+.wlx-badge--sale {
+    background: var(--accent-grad);
+    color: #fff;
+}
+
+.wlx-badge--new {
+    background: var(--rating);
+    color: #191919;
+}
+
+/* ---------- Рейтинг ---------- */
+.wlx-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--rating);
+    font-size: 15px;
+}
+
+    .wlx-rating .wlx-rating__count {
+        color: var(--text-muted);
+        font-size: 13px;
+        margin-left: 6px;
+    }
+
+/* ---------- Цена ---------- */
+.wlx-price {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.wlx-price--old {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: line-through;
+    margin-left: 8px;
+}
+
+/* ---------- Карточка товара ---------- */
+.wlx-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg, var(--card-grad-b), var(--card-grad-a));
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+    .wlx-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-deep);
+    }
+
+.wlx-card__badges {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    gap: 6px;
+    z-index: 2;
+}
+
+.wlx-card__media {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, var(--card-grad-b), var(--card-grad-a));
+    padding: 18px;
+}
+
+    .wlx-card__media img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+.wlx-card__shield {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 26px;
+    height: 26px;
+    color: var(--accent);
+    opacity: 0.9;
+}
+
+.wlx-card__body {
+    padding: 14px 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--card-bg);
+}
+
+.wlx-card__title {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text-primary);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ---------- Сетка карточек ---------- */
+.wlx-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* ---------- Ряд категорий с иконками ---------- */
+.wlx-cats {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 22px 0;
+}
+
+.wlx-cat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-width: 120px;
+    padding: 14px 10px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+    .wlx-cat:hover {
+        background: var(--tag-bg);
+        transform: translateY(-2px);
+        color: var(--accent);
+    }
+
+    .wlx-cat .wlx-cat__icon {
+        font-size: 30px;
+        line-height: 1;
+    }
+
+    .wlx-cat .wlx-cat__label {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-align: center;
+    }
+
+/* ---------- Формы / инпуты ---------- */
+.wlx-field {
+    margin-bottom: 16px;
+}
+
+    .wlx-field label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-bottom: 6px;
+    }
+
+.wlx-input,
+.wlx-form .form-control,
+.wlx-form input[type="text"],
+.wlx-form input[type="email"],
+.wlx-form input[type="password"],
+.wlx-form input[type="number"],
+.wlx-form select,
+.wlx-form textarea {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 14px;
+    color: var(--text-primary);
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .wlx-input:focus,
+    .wlx-form .form-control:focus,
+    .wlx-form input:focus,
+    .wlx-form select:focus,
+    .wlx-form textarea:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(55, 145, 0, 0.12);
+    }
+
+/* ---------- Панель / карточка-контейнер ---------- */
+.wlx-panel {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+}
+
+/* ---------- Таблицы ---------- */
+.wlx-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+    .wlx-table th,
+    .wlx-table td {
+        padding: 12px 14px;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 14px;
+        color: var(--text-primary);
+    }
+
+    .wlx-table thead th {
+        background: var(--tag-bg);
+        color: var(--text-secondary);
+        font-weight: 700;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .wlx-table tbody tr:hover {
+        background: var(--tag-bg);
+    }
+
+/* ---------- Чипы / табы ---------- */
+.wlx-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
+
+.wlx-tab {
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+    .wlx-tab:hover { color: var(--text-primary); }
+
+    .wlx-tab.active {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+    }
+
+/* ---------- Лёгкие оверрайды Bootstrap для согласованности ---------- */
+.btn-primary {
+    background: var(--accent-grad);
+    border: none;
+}
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+        filter: brightness(1.06);
+        background: var(--accent-grad);
+        border: none;
+    }
+
+.btn-outline-primary {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+    .btn-outline-primary:hover {
+        background: var(--accent);
+        border-color: var(--accent);
+    }
+
+a { color: var(--accent); }
+a:hover { color: var(--accent-hover); }
+
+/* ---------- Адаптив ---------- */
+@media (max-width: 768px) {
+    .wlx-heading { font-size: 22px; }
+    .wlx-btn--xxl { padding: 14px 24px; font-size: 15px; }
+    .wlx-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+    .wlx-cat { min-width: 92px; }
+}
